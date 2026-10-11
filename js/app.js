@@ -148,7 +148,16 @@
             img.className = 'owner-pfp-img tooltip';
             img.style.width = '24px';
             img.style.height = '24px';
-            img.setAttribute('data-tooltip', m.name);
+            img.style.cursor = 'pointer';
+            img.setAttribute('data-tooltip', `${m.name} (Click to rename)`);
+            img.addEventListener('click', () => {
+                const newName = prompt(`Enter custom name for this member:`, m.name);
+                if (newName && newName.trim()) {
+                    m.name = newName.trim();
+                    localStorage.setItem(STORAGE_KEY, JSON.stringify(state.familyData));
+                    loadFamilyData(state.familyData);
+                }
+            });
             img.onerror = () => { img.src = 'https://avatars.steamstatic.com/fef49e7fa7e1997310d705b2a6158ff8dc1cdfeb_medium.jpg'; };
             elements.familyMembersPillList.appendChild(img);
         });
@@ -591,6 +600,12 @@
                 const tabId = btn.getAttribute('data-tab');
                 document.getElementById(tabId).classList.add('active');
             });
+        });
+
+        // Bookmarklet Link Drag / Click Protection
+        elements.bookmarkletLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            alert("📌 Don't click this button here!\n\nDrag it up to your browser's Bookmarks bar (or right-click and select 'Bookmark link' / 'Add to favorites').\n\nThen navigate to store.steampowered.com in your browser and click the bookmark there!");
         });
 
         // Copy Console Snippet
