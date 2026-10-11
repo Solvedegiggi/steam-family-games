@@ -705,17 +705,59 @@ a:hover {
     margin-bottom: 16px;
     color: var(--text-secondary);
     font-size: 13px;
+    gap: 16px;
+    flex-wrap: wrap;
 }
 
 .status-summary {
     display: flex;
     align-items: center;
     gap: 16px;
+    flex-wrap: wrap;
 }
 
 .status-highlight {
     color: var(--text-primary);
     font-weight: 600;
+}
+
+.status-members-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.status-members-hint {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: var(--text-muted);
+    user-select: none;
+    white-space: nowrap;
+}
+
+.status-hint-icon {
+    opacity: 0.7;
+    flex-shrink: 0;
+}
+
+.family-members-pill-list {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.family-members-pill-list .owner-pfp-img {
+    transition: transform 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.family-members-pill-list .owner-pfp-img:hover {
+    transform: translateY(-2px);
+    border-color: var(--steam-blue);
+    box-shadow: 0 0 8px rgba(26, 159, 255, 0.4);
 }
 
 /* ==========================================================================

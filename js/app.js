@@ -53,6 +53,7 @@
         familyGroupName: document.getElementById('family-group-name'),
         filteredCount: document.getElementById('filtered-count'),
         totalCount: document.getElementById('total-count'),
+        statusMembersGroup: document.getElementById('status-members-group'),
         familyMembersPillList: document.getElementById('family-members-pill-list'),
         tableCard: document.getElementById('table-card'),
         gamesTableBody: document.getElementById('games-table-body'),
@@ -320,6 +321,9 @@
         updateStatusBarCounts();
 
         // Populate member avatars in status bar (sorted)
+        if (elements.statusMembersGroup) {
+            elements.statusMembersGroup.style.display = sortedMembers.length > 0 ? 'flex' : 'none';
+        }
         elements.familyMembersPillList.innerHTML = '';
         sortedMembers.forEach(m => {
             const sid = String(m.steamid);
@@ -335,9 +339,12 @@
             if (isYou) {
                 img.style.boxShadow = '0 0 0 2px #38bdf8';
             }
-            img.setAttribute('data-tooltip', `${m.name}${isYou ? ' (You)' : ''} (${gameCount} games)\nClick to rename • Right-click to set as active user`);
+            const renameTooltip = window.i18n ? window.i18n.t('tooltip_rename_member') : 'Click to rename • Right-click to set as active user';
+            const youStr = isYou ? (window.i18n ? ` (${window.i18n.t('you')})` : ' (You)') : '';
+            img.setAttribute('data-tooltip', `${m.name}${youStr} (${gameCount} games)\n${renameTooltip}`);
             img.addEventListener('click', () => {
-                const newName = prompt(`Enter custom name for this member:`, m.name);
+                const promptMsg = window.i18n ? window.i18n.t('prompt_rename_member') : 'Enter custom name for this member:';
+                const newName = prompt(promptMsg, m.name);
                 if (newName && newName.trim()) {
                     m.name = newName.trim();
                     localStorage.setItem(STORAGE_KEY, JSON.stringify(state.familyData));
@@ -1073,6 +1080,9 @@
                 elements.syncBtnLabel.textContent = `${familyLabel} (${state.familyData.apps.length})`;
 
                 // Update status bar member tooltip translations
+                if (elements.statusMembersGroup) {
+                    elements.statusMembersGroup.style.display = sortedMembers.length > 0 ? 'flex' : 'none';
+                }
                 elements.familyMembersPillList.innerHTML = '';
                 sortedMembers.forEach(m => {
                     const sid = String(m.steamid);
@@ -1088,10 +1098,12 @@
                     if (isYou) {
                         img.style.boxShadow = '0 0 0 2px #38bdf8';
                     }
+                    const renameTooltip = window.i18n ? window.i18n.t('tooltip_rename_member') : 'Click to rename • Right-click to set as active user';
                     const youStr = isYou ? (window.i18n ? ` (${window.i18n.t('you')})` : ' (You)') : '';
-                    img.setAttribute('data-tooltip', `${m.name}${youStr} (${gameCount} games)\nClick to rename • Right-click to set as active user`);
+                    img.setAttribute('data-tooltip', `${m.name}${youStr} (${gameCount} games)\n${renameTooltip}`);
                     img.addEventListener('click', () => {
-                        const newName = prompt(`Enter custom name for this member:`, m.name);
+                        const promptMsg = window.i18n ? window.i18n.t('prompt_rename_member') : 'Enter custom name for this member:';
+                        const newName = prompt(promptMsg, m.name);
                         if (newName && newName.trim()) {
                             m.name = newName.trim();
                             localStorage.setItem(STORAGE_KEY, JSON.stringify(state.familyData));

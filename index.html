@@ -276,7 +276,16 @@
                 <span id="status-showing-text">Showing <strong id="filtered-count" class="status-highlight">0</strong>
                     of <strong id="total-count">0</strong> games</span>
             </div>
-            <div id="family-members-pill-list" style="display: flex; gap: 8px; align-items: center;"></div>
+            <div class="status-members-group" id="status-members-group">
+                <span class="status-members-hint" id="status-members-hint">
+                    <svg class="status-hint-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                        <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                    </svg>
+                    <span data-i18n="customize_members_hint">Customize member names:</span>
+                </span>
+                <div id="family-members-pill-list" class="family-members-pill-list"></div>
+            </div>
         </div>
 
         <!-- Table View -->
