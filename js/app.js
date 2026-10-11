@@ -171,7 +171,46 @@
     // Data Loading & State Management
     // =========================================================================
 
+    function mergeAppsByAppId(apps) {
+        if (!Array.isArray(apps)) return [];
+        const appMap = new Map();
+        apps.forEach(app => {
+            const id = Number(app.appid);
+            if (!id) return;
+            if (!appMap.has(id)) {
+                appMap.set(id, {
+                    ...app,
+                    appid: id,
+                    owner_steamids: new Set((app.owner_steamids || []).map(String)),
+                    exclude_reason: app.exclude_reason || 0
+                });
+            } else {
+                const existing = appMap.get(id);
+                (app.owner_steamids || []).forEach(sid => existing.owner_steamids.add(String(sid)));
+                // Prioritize shareable if any copy is shareable
+                if (existing.exclude_reason !== 0 && app.exclude_reason === 0) {
+                    existing.exclude_reason = 0;
+                }
+                if (!existing.capsule_url && app.capsule_url) {
+                    existing.capsule_url = app.capsule_url;
+                }
+            }
+        });
+
+        return Array.from(appMap.values()).map(app => ({
+            ...app,
+            owner_steamids: Array.from(app.owner_steamids)
+        }));
+    }
+
     function loadFamilyData(data) {
+        if (data && Array.isArray(data.apps)) {
+            data.apps = mergeAppsByAppId(data.apps);
+            try {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+            } catch (e) {}
+        }
+
         state.familyData = data;
         state.membersMap.clear();
         state.filters.owners = {};
@@ -918,6 +957,7 @@
             return;
         }
 
+        data.apps = mergeAppsByAppId(data.apps);
         localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
         loadFamilyData(data);
         closeModal();

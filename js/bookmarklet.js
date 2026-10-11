@@ -109,7 +109,7 @@ window.generateBookmarkletCode = function(targetSiteUrl) {
         });
 
         updateHud('Downloading shared library apps...');
-        const appsUrl = 'https://api.steampowered.com/IFamilyGroupsService/GetSharedLibraryApps/v1/?access_token=' + encodeURIComponent(token) + '&family_groupid=' + encodeURIComponent(familyGroupId) + '&include_own=true&include_excluded=true&include_non_games=false';
+        const appsUrl = 'https://api.steampowered.com/IFamilyGroupsService/GetSharedLibraryApps/v1/?access_token=' + encodeURIComponent(token) + '&family_groupid=' + encodeURIComponent(familyGroupId) + '&include_own=true&include_excluded=true&include_free=true&include_non_games=false';
         const aResp = await fetch(appsUrl);
         const aData = await aResp.json();
         const rawApps = aData?.response?.apps || [];
@@ -119,7 +119,8 @@ window.generateBookmarkletCode = function(targetSiteUrl) {
         if (rawApps.length > 0) {
             try {
                 const chunkArray = (arr, size) => Array.from({ length: Math.ceil(arr.length / size) }, (v, i) => arr.slice(i * size, i * size + size));
-                const chunks = chunkArray(rawApps.map(a => a.appid), 80);
+                const uniqueAppIds = Array.from(new Set(rawApps.map(a => Number(a.appid)).filter(Boolean)));
+                const chunks = chunkArray(uniqueAppIds, 80);
                 await Promise.all(chunks.map(async (chunk) => {
                     const payload = {
                         ids: chunk.map(id => ({ appid: id })),
@@ -146,12 +147,33 @@ window.generateBookmarkletCode = function(targetSiteUrl) {
             }
         }
 
-        const formattedApps = rawApps.map(app => ({
-            appid: app.appid,
-            name: app.name,
-            owner_steamids: (app.owner_steamids || []).map(String),
-            exclude_reason: app.exclude_reason || 0,
-            capsule_url: assetMap[app.appid] || null
+        // Deduplicate and merge multiple license records by appid (unions all owners)
+        const appMap = new Map();
+        rawApps.forEach(app => {
+            const id = Number(app.appid);
+            if (!appMap.has(id)) {
+                appMap.set(id, {
+                    appid: id,
+                    name: app.name,
+                    owner_steamids: new Set((app.owner_steamids || []).map(String)),
+                    exclude_reason: app.exclude_reason || 0,
+                    capsule_url: assetMap[id] || null
+                });
+            } else {
+                const existing = appMap.get(id);
+                (app.owner_steamids || []).forEach(sid => existing.owner_steamids.add(String(sid)));
+                if (existing.exclude_reason !== 0 && app.exclude_reason === 0) {
+                    existing.exclude_reason = 0;
+                }
+                if (!existing.capsule_url && assetMap[id]) {
+                    existing.capsule_url = assetMap[id];
+                }
+            }
+        });
+
+        const formattedApps = Array.from(appMap.values()).map(app => ({
+            ...app,
+            owner_steamids: Array.from(app.owner_steamids)
         }));
 
         const finalPayload = {
