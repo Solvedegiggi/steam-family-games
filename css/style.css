@@ -371,10 +371,10 @@ a:hover {
 }
 
 .filter-legend {
-    display: flex;
+    display: inline-flex;
     align-items: center;
-    gap: 8px;
-    font-size: 11px;
+    gap: 12px;
+    font-size: 12px;
     color: var(--text-muted);
 }
 
@@ -577,7 +577,26 @@ a:hover {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 12px;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.filter-summary-legend-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex-wrap: wrap;
+}
+
+.active-filters-summary {
+    font-size: 13px;
+    color: var(--text-muted);
+}
+
+.filter-actions-divider {
+    color: var(--border-color);
+    font-size: 13px;
+    user-select: none;
 }
 
 .btn-text {

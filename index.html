@@ -66,16 +66,6 @@
             <div class="filter-card">
                 <div class="filter-card-header">
                     <span class="filter-group-title" data-i18n="filter_modes">Player Modes</span>
-                    <span class="filter-legend">
-                        <span class="legend-item"><span class="legend-icon icon-exclude">✕</span> <span
-                                data-i18n="exclude">Exclude</span></span>
-                        <span class="legend-item"><span class="legend-icon icon-neutral">—</span> <span
-                                data-i18n="default">Default</span></span>
-                        <span class="legend-item"><span class="legend-icon icon-include">✓</span> <span
-                                data-i18n="include">Include</span></span>
-                        <span class="legend-item"><span class="legend-icon icon-exclusive">✓✓</span> <span
-                                data-i18n="exclusive">Exclusive</span></span>
-                    </span>
                 </div>
                 <div class="filter-items-list" id="modes-filter-container">
                     <div class="tristate-row" data-type="mode" data-key="singleplayer">
@@ -160,16 +150,6 @@
             <div class="filter-card">
                 <div class="filter-card-header">
                     <span class="filter-group-title" data-i18n="filter_owners">Family Owners</span>
-                    <span class="filter-legend">
-                        <span class="legend-item"><span class="legend-icon icon-exclude">✕</span> <span
-                                data-i18n="exclude">Exclude</span></span>
-                        <span class="legend-item"><span class="legend-icon icon-neutral">—</span> <span
-                                data-i18n="default">Default</span></span>
-                        <span class="legend-item"><span class="legend-icon icon-include">✓</span> <span
-                                data-i18n="include">Include</span></span>
-                        <span class="legend-item"><span class="legend-icon icon-exclusive">✓✓</span> <span
-                                data-i18n="exclusive">Exclusive</span></span>
-                    </span>
                 </div>
                 <div class="filter-items-list" id="owner-filters-container">
                     <span style="color: var(--text-muted); font-size: 13px;" data-i18n="no_family_loaded">No family
@@ -235,11 +215,22 @@
         </div>
 
         <div class="filter-actions-bar">
-            <span id="active-filters-summary"
-                style="font-size: 13px; color: var(--text-muted); margin-right: auto; align-self: center;"
-                data-i18n="no_filters_active">
-                No filters active (showing all games)
-            </span>
+            <div class="filter-summary-legend-wrapper">
+                <span id="active-filters-summary" class="active-filters-summary" data-i18n="no_filters_active">
+                    No filters active (showing all games)
+                </span>
+                <span class="filter-actions-divider">•</span>
+                <span class="filter-legend">
+                    <span class="legend-item"><span class="legend-icon icon-exclude">✕</span> <span
+                            data-i18n="exclude">Exclude</span></span>
+                    <span class="legend-item"><span class="legend-icon icon-neutral">—</span> <span
+                            data-i18n="default">Default</span></span>
+                    <span class="legend-item"><span class="legend-icon icon-include">✓</span> <span
+                            data-i18n="include">Include</span></span>
+                    <span class="legend-item"><span class="legend-icon icon-exclusive">✓✓</span> <span
+                            data-i18n="exclusive">Exclusive</span></span>
+                </span>
+            </div>
             <button type="button" id="reset-filters-btn" class="btn-text" data-i18n="reset_filters">
                 ↺ Reset all filters
             </button>
