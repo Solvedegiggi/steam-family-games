@@ -1035,19 +1035,27 @@
         const currentUrl = window.location.href.split('#')[0];
         const res = window.generateBookmarkletCode(currentUrl);
 
+        const bookmarkTitle = '🔄 Sync Steam Family Games';
         generatedBookmarkletUrl = res.bookmarkletUrl;
         elements.bookmarkletLink.href = res.bookmarkletUrl;
-        elements.bookmarkletLink.title = 'Steam Family Games';
+        elements.bookmarkletLink.title = bookmarkTitle;
         elements.snippetCodeBox.textContent = res.raw;
+
+        const textSpan = elements.bookmarkletLink.querySelector('span');
 
         elements.bookmarkletLink.addEventListener('dragstart', (e) => {
             if (generatedBookmarkletUrl) {
-                const bookmarkTitle = 'Steam Family Games';
+                if (textSpan) textSpan.textContent = bookmarkTitle;
+
                 try {
                     e.dataTransfer.setData('text/x-moz-url', generatedBookmarkletUrl + '\n' + bookmarkTitle);
                     e.dataTransfer.setData('text/html', '<a href="' + generatedBookmarkletUrl + '" icon="assets/sync%20logo.svg">' + bookmarkTitle + '</a>');
                 } catch (err) {}
             }
+        });
+
+        elements.bookmarkletLink.addEventListener('dragend', () => {
+            if (textSpan) textSpan.textContent = 'Sync Steam Family Games';
         });
     }
 

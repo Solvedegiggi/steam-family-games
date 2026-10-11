@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,6 +8,7 @@
     <link rel="icon" type="image/svg+xml" href="assets/sync%20logo.svg">
     <link rel="stylesheet" href="css/style.css">
 </head>
+
 <body>
 
     <!-- Header Navigation -->
@@ -19,9 +21,11 @@
             <!-- Search Bar -->
             <div class="search-container">
                 <svg class="search-icon" viewBox="0 0 24 24">
-                    <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+                    <path
+                        d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z" />
                 </svg>
-                <input type="text" id="search-input" class="search-input" placeholder="Search games by title..." autocomplete="off">
+                <input type="text" id="search-input" class="search-input" placeholder="Search games by title..."
+                    autocomplete="off">
                 <button type="button" id="search-clear-btn" class="search-clear-btn" title="Clear search">✕</button>
             </div>
 
@@ -29,7 +33,7 @@
             <div class="header-actions">
                 <button type="button" id="filters-toggle-btn" class="btn btn-secondary">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M10 18h4v-2h-4v2zM3 6v2h18V6H3zm3 7h12v-2H6v2z"/>
+                        <path d="M10 18h4v-2h-4v2zM3 6v2h18V6H3zm3 7h12v-2H6v2z" />
                     </svg>
                     <span>Filters</span>
                     <span id="filter-badge-counter" class="filter-badge-counter">0</span>
@@ -62,10 +66,14 @@
                             <span class="tag-badge badge-single">Single-player</span>
                         </div>
                         <div class="tristate-switch">
-                            <button type="button" class="tristate-btn btn-exclude" data-state="exclude" title="Do not show Single-player">✕</button>
-                            <button type="button" class="tristate-btn btn-neutral active" data-state="neutral" title="Show normally">—</button>
-                            <button type="button" class="tristate-btn btn-include" data-state="include" title="Show games with Single-player">✓</button>
-                            <button type="button" class="tristate-btn btn-exclusive" data-state="exclusive" title="Show only games with exclusively Single-player tag">✓✓</button>
+                            <button type="button" class="tristate-btn btn-exclude" data-state="exclude"
+                                title="Do not show Single-player">✕</button>
+                            <button type="button" class="tristate-btn btn-neutral active" data-state="neutral"
+                                title="Show normally">—</button>
+                            <button type="button" class="tristate-btn btn-include" data-state="include"
+                                title="Show games with Single-player">✓</button>
+                            <button type="button" class="tristate-btn btn-exclusive" data-state="exclusive"
+                                title="Show only games with exclusively Single-player tag">✓✓</button>
                         </div>
                     </div>
                     <div class="tristate-row" data-type="mode" data-key="multiplayer">
@@ -73,10 +81,14 @@
                             <span class="tag-badge badge-multi">Multiplayer</span>
                         </div>
                         <div class="tristate-switch">
-                            <button type="button" class="tristate-btn btn-exclude" data-state="exclude" title="Do not show Multiplayer">✕</button>
-                            <button type="button" class="tristate-btn btn-neutral active" data-state="neutral" title="Show normally">—</button>
-                            <button type="button" class="tristate-btn btn-include" data-state="include" title="Show games with Multiplayer">✓</button>
-                            <button type="button" class="tristate-btn btn-exclusive" data-state="exclusive" title="Show only games with exclusively Multiplayer tag">✓✓</button>
+                            <button type="button" class="tristate-btn btn-exclude" data-state="exclude"
+                                title="Do not show Multiplayer">✕</button>
+                            <button type="button" class="tristate-btn btn-neutral active" data-state="neutral"
+                                title="Show normally">—</button>
+                            <button type="button" class="tristate-btn btn-include" data-state="include"
+                                title="Show games with Multiplayer">✓</button>
+                            <button type="button" class="tristate-btn btn-exclusive" data-state="exclusive"
+                                title="Show only games with exclusively Multiplayer tag">✓✓</button>
                         </div>
                     </div>
                     <div class="tristate-row" data-type="mode" data-key="coop">
@@ -84,10 +96,14 @@
                             <span class="tag-badge badge-coop">Co-op</span>
                         </div>
                         <div class="tristate-switch">
-                            <button type="button" class="tristate-btn btn-exclude" data-state="exclude" title="Do not show Co-op">✕</button>
-                            <button type="button" class="tristate-btn btn-neutral active" data-state="neutral" title="Show normally">—</button>
-                            <button type="button" class="tristate-btn btn-include" data-state="include" title="Show games with Co-op">✓</button>
-                            <button type="button" class="tristate-btn btn-exclusive" data-state="exclusive" title="Show only games with exclusively Co-op tag">✓✓</button>
+                            <button type="button" class="tristate-btn btn-exclude" data-state="exclude"
+                                title="Do not show Co-op">✕</button>
+                            <button type="button" class="tristate-btn btn-neutral active" data-state="neutral"
+                                title="Show normally">—</button>
+                            <button type="button" class="tristate-btn btn-include" data-state="include"
+                                title="Show games with Co-op">✓</button>
+                            <button type="button" class="tristate-btn btn-exclusive" data-state="exclusive"
+                                title="Show only games with exclusively Co-op tag">✓✓</button>
                         </div>
                     </div>
                     <div class="tristate-row" data-type="mode" data-key="local_mp">
@@ -95,10 +111,14 @@
                             <span class="tag-badge badge-local">Local MP</span>
                         </div>
                         <div class="tristate-switch">
-                            <button type="button" class="tristate-btn btn-exclude" data-state="exclude" title="Do not show Local MP">✕</button>
-                            <button type="button" class="tristate-btn btn-neutral active" data-state="neutral" title="Show normally">—</button>
-                            <button type="button" class="tristate-btn btn-include" data-state="include" title="Show games with Local MP">✓</button>
-                            <button type="button" class="tristate-btn btn-exclusive" data-state="exclusive" title="Show only games with exclusively Local MP tag">✓✓</button>
+                            <button type="button" class="tristate-btn btn-exclude" data-state="exclude"
+                                title="Do not show Local MP">✕</button>
+                            <button type="button" class="tristate-btn btn-neutral active" data-state="neutral"
+                                title="Show normally">—</button>
+                            <button type="button" class="tristate-btn btn-include" data-state="include"
+                                title="Show games with Local MP">✓</button>
+                            <button type="button" class="tristate-btn btn-exclusive" data-state="exclusive"
+                                title="Show only games with exclusively Local MP tag">✓✓</button>
                         </div>
                     </div>
                     <div class="tristate-row" data-type="mode" data-key="pvp">
@@ -106,10 +126,14 @@
                             <span class="tag-badge badge-pvp">PvP</span>
                         </div>
                         <div class="tristate-switch">
-                            <button type="button" class="tristate-btn btn-exclude" data-state="exclude" title="Do not show PvP">✕</button>
-                            <button type="button" class="tristate-btn btn-neutral active" data-state="neutral" title="Show normally">—</button>
-                            <button type="button" class="tristate-btn btn-include" data-state="include" title="Show games with PvP">✓</button>
-                            <button type="button" class="tristate-btn btn-exclusive" data-state="exclusive" title="Show only games with exclusively PvP tag">✓✓</button>
+                            <button type="button" class="tristate-btn btn-exclude" data-state="exclude"
+                                title="Do not show PvP">✕</button>
+                            <button type="button" class="tristate-btn btn-neutral active" data-state="neutral"
+                                title="Show normally">—</button>
+                            <button type="button" class="tristate-btn btn-include" data-state="include"
+                                title="Show games with PvP">✓</button>
+                            <button type="button" class="tristate-btn btn-exclusive" data-state="exclusive"
+                                title="Show only games with exclusively PvP tag">✓✓</button>
                         </div>
                     </div>
                 </div>
@@ -142,9 +166,12 @@
                             <span class="tag-badge badge-warning">Not Shareable</span>
                         </div>
                         <div class="tristate-switch">
-                            <button type="button" class="tristate-btn btn-exclude" data-state="exclude" title="Do not show Not Shareable games">✕</button>
-                            <button type="button" class="tristate-btn btn-neutral active" data-state="neutral" title="Show normally">—</button>
-                            <button type="button" class="tristate-btn btn-include" data-state="include" title="Show only Not Shareable games">✓</button>
+                            <button type="button" class="tristate-btn btn-exclude" data-state="exclude"
+                                title="Do not show Not Shareable games">✕</button>
+                            <button type="button" class="tristate-btn btn-neutral active" data-state="neutral"
+                                title="Show normally">—</button>
+                            <button type="button" class="tristate-btn btn-include" data-state="include"
+                                title="Show only Not Shareable games">✓</button>
                         </div>
                     </div>
                     <div class="tristate-row" data-type="availability" data-key="free">
@@ -152,9 +179,12 @@
                             <span class="tag-badge badge-free">Free to Play</span>
                         </div>
                         <div class="tristate-switch">
-                            <button type="button" class="tristate-btn btn-exclude" data-state="exclude" title="Do not show Free to Play games">✕</button>
-                            <button type="button" class="tristate-btn btn-neutral active" data-state="neutral" title="Show normally">—</button>
-                            <button type="button" class="tristate-btn btn-include" data-state="include" title="Show only Free to Play games">✓</button>
+                            <button type="button" class="tristate-btn btn-exclude" data-state="exclude"
+                                title="Do not show Free to Play games">✕</button>
+                            <button type="button" class="tristate-btn btn-neutral active" data-state="neutral"
+                                title="Show normally">—</button>
+                            <button type="button" class="tristate-btn btn-include" data-state="include"
+                                title="Show only Free to Play games">✓</button>
                         </div>
                     </div>
                 </div>
@@ -166,7 +196,8 @@
                     <span class="filter-group-title">Copies in Family</span>
                 </div>
                 <div class="copies-selector-wrapper">
-                    <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 8px;">Minimum copies owned:</div>
+                    <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 8px;">Minimum copies owned:
+                    </div>
                     <div class="copies-chips-container" id="copies-filter-container">
                         <button type="button" class="copies-chip active" data-copies="1">Any (1+)</button>
                         <button type="button" class="copies-chip" data-copies="2">2+ Copies</button>
@@ -180,7 +211,8 @@
         </div>
 
         <div class="filter-actions-bar">
-            <span id="active-filters-summary" style="font-size: 13px; color: var(--text-muted); margin-right: auto; align-self: center;">
+            <span id="active-filters-summary"
+                style="font-size: 13px; color: var(--text-muted); margin-right: auto; align-self: center;">
                 No filters active (showing all games)
             </span>
             <button type="button" id="reset-filters-btn" class="btn-text">
@@ -196,7 +228,8 @@
             <div class="status-summary">
                 <span>Family: <strong id="family-group-name" class="status-highlight">Steam Family</strong></span>
                 <span>•</span>
-                <span>Showing <strong id="filtered-count" class="status-highlight">0</strong> of <strong id="total-count">0</strong> games</span>
+                <span>Showing <strong id="filtered-count" class="status-highlight">0</strong> of <strong
+                        id="total-count">0</strong> games</span>
             </div>
             <div id="family-members-pill-list" style="display: flex; gap: 8px; align-items: center;"></div>
         </div>
@@ -234,16 +267,18 @@
         <!-- Empty State (No library loaded) -->
         <div id="empty-state" class="empty-state-card">
             <svg class="empty-icon" viewBox="0 0 24 24">
-                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 14h-2v-2h2v2zm0-4h-2V7h2v5z"/>
+                <path
+                    d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 14h-2v-2h2v2zm0-4h-2V7h2v5z" />
             </svg>
             <h2 class="empty-title">Explore Your Steam Family Library</h2>
             <p class="empty-desc">
-                View all shared games in your Steam Family Group with real-time multiplayer tags, owner profiles, and copy tracking in a sleek SteamDB-style dashboard.
+                View all shared games in your Steam Family Group with real-time multiplayer tags, owner profiles, and
+                copy tracking in a sleek SteamDB-style dashboard.
             </p>
             <div class="empty-actions">
                 <button type="button" id="empty-sync-btn" class="btn btn-primary">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
+                        <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" />
                     </svg>
                     <span>Sync Your Steam Family</span>
                 </button>
@@ -267,7 +302,8 @@
 
             <!-- Modal Tabs -->
             <div class="modal-tabs">
-                <button type="button" class="modal-tab-btn active" data-tab="tab-bookmarklet">⭐ Bookmarklet (1-Click)</button>
+                <button type="button" class="modal-tab-btn active" data-tab="tab-bookmarklet">⭐ Bookmarklet
+                    (1-Click)</button>
                 <button type="button" class="modal-tab-btn" data-tab="tab-snippet">💻 Steam Console Snippet</button>
                 <button type="button" class="modal-tab-btn" data-tab="tab-file">📁 Drop JSON File</button>
             </div>
@@ -276,7 +312,8 @@
                 <!-- Tab 1: Bookmarklet (Primary) -->
                 <div id="tab-bookmarklet" class="tab-pane active">
                     <p style="color: var(--text-secondary); margin-bottom: 14px; line-height: 1.5;">
-                        <strong style="color: #ffffff; font-size: 14px; display: inline-flex; align-items: center; gap: 6px;">
+                        <strong
+                            style="color: #ffffff; font-size: 14px; display: inline-flex; align-items: center; gap: 6px;">
                             <img src="assets/sync%20logo.svg" width="16" height="16" alt="Sync">
                             Steam Family Games (1-Click Bookmarklet):
                         </strong>
@@ -287,18 +324,22 @@
                             <div class="step-content">
                                 <strong>Drag this button to your Bookmarks Bar:</strong>
                                 <div class="bookmarklet-drag-zone">
-                                    <a href="javascript:void(0)" id="bookmarklet-link" draggable="true" class="bookmarklet-pill" title="Steam Family Games" icon="assets/sync%20logo.svg">
+                                    <a href="javascript:void(0)" id="bookmarklet-link" draggable="true"
+                                        class="bookmarklet-pill" title="🔄 Sync Steam Family Games"
+                                        icon="assets/sync%20logo.svg">
                                         <img src="assets/sync%20logo.svg" width="18" height="18" alt="Sync">
-                                        <span>Steam Family Games</span>
+                                        <span>Sync Steam Family Games</span>
                                     </a>
                                     <div style="font-size: 12px; color: var(--text-muted); margin-top: 10px;">
                                         Drag to your Bookmarks bar, or copy the code manually below:
                                     </div>
-                                    <button type="button" id="copy-bookmarklet-url-btn" class="btn btn-secondary" style="margin-top: 8px; font-size: 12px; height: 32px;">
+                                    <button type="button" id="copy-bookmarklet-url-btn" class="btn btn-secondary"
+                                        style="margin-top: 8px; font-size: 12px; height: 32px;">
                                         <span>📋 Copy Bookmarklet URL</span>
                                     </button>
                                     <div style="font-size: 12px; color: var(--text-secondary); margin-top: 8px;">
-                                        Bookmark name: <strong style="color: var(--steam-blue);">Steam Family Games</strong>
+                                        Bookmark name: <strong style="color: var(--steam-blue);">🔄 Sync Steam Family
+                                            Games</strong>
                                     </div>
                                 </div>
                             </div>
@@ -307,14 +348,16 @@
                         <div class="step-item">
                             <div class="step-num">2</div>
                             <div class="step-content">
-                                Go to <a href="https://store.steampowered.com">store.steampowered.com</a> while logged in to Steam.
+                                Go to <a href="https://store.steampowered.com">store.steampowered.com</a> while logged
+                                in to Steam.
                             </div>
                         </div>
 
                         <div class="step-item">
                             <div class="step-num">3</div>
                             <div class="step-content">
-                                Click the <strong>Sync Steam Family</strong> bookmark in your bookmarks bar. It will automatically gather your family library (with full artwork &amp; player tags) and redirect right back here in the same tab!
+                                Click the <strong>Sync Steam Family Games</strong> bookmark in your bookmarks bar. It
+                                will automatically gather your family library and redirect right back here!
                             </div>
                         </div>
                     </div>
@@ -325,13 +368,17 @@
                     <p style="color: var(--text-secondary); margin-bottom: 12px; line-height: 1.6;">
                         <strong>1-Click Console Sync:</strong>
                     </p>
-                    <ol style="margin-left: 20px; color: var(--text-secondary); margin-bottom: 16px; display: flex; flex-direction: column; gap: 8px;">
-                        <li>Open <a href="https://store.steampowered.com">store.steampowered.com</a> in your browser (make sure you are logged in).</li>
-                        <li>Press <kbd>F12</kbd> (or right-click &rarr; <em>Inspect</em>) and click the <strong>Console</strong> tab.</li>
+                    <ol
+                        style="margin-left: 20px; color: var(--text-secondary); margin-bottom: 16px; display: flex; flex-direction: column; gap: 8px;">
+                        <li>Open <a href="https://store.steampowered.com">store.steampowered.com</a> in your browser
+                            (make sure you are logged in).</li>
+                        <li>Press <kbd>F12</kbd> (or right-click &rarr; <em>Inspect</em>) and click the
+                            <strong>Console</strong> tab.</li>
                         <li>Paste this script and hit <kbd>Enter</kbd>:</li>
                     </ol>
                     <div class="code-box" id="snippet-code-box"></div>
-                    <button type="button" id="copy-snippet-btn" class="btn btn-secondary" style="width: 100%; justify-content: center;">
+                    <button type="button" id="copy-snippet-btn" class="btn btn-secondary"
+                        style="width: 100%; justify-content: center;">
                         <span>📋 Copy Script to Clipboard</span>
                     </button>
                 </div>
@@ -343,20 +390,26 @@
                     </p>
                     <div id="dropzone" class="dropzone">
                         <svg width="36" height="36" viewBox="0 0 24 24" fill="var(--steam-blue)">
-                            <path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM14 13v4h-4v-4H7l5-5 5 5h-3z"/>
+                            <path
+                                d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM14 13v4h-4v-4H7l5-5 5 5h-3z" />
                         </svg>
-                        <div class="dropzone-text">Drag & drop <strong>family_games.json</strong> here, or click to browse</div>
+                        <div class="dropzone-text">Drag & drop <strong>family_games.json</strong> here, or click to
+                            browse</div>
                         <input type="file" id="file-input" class="file-input" accept=".json,application/json">
                     </div>
-                    <textarea id="json-paste-input" class="search-input" style="height: 90px; padding: 10px; font-family: var(--font-mono); font-size: 12px;" placeholder="Or paste JSON content here..."></textarea>
-                    <button type="button" id="import-pasted-json-btn" class="btn btn-secondary" style="margin-top: 10px; width: 100%; justify-content: center;">
+                    <textarea id="json-paste-input" class="search-input"
+                        style="height: 90px; padding: 10px; font-family: var(--font-mono); font-size: 12px;"
+                        placeholder="Or paste JSON content here..."></textarea>
+                    <button type="button" id="import-pasted-json-btn" class="btn btn-secondary"
+                        style="margin-top: 10px; width: 100%; justify-content: center;">
                         <span>Load Pasted JSON</span>
                     </button>
                 </div>
             </div>
 
             <div class="modal-footer">
-                <button type="button" id="clear-data-btn" class="btn-text" style="color: #ff6b6b;">Clear saved data</button>
+                <button type="button" id="clear-data-btn" class="btn-text" style="color: #ff6b6b;">Clear saved
+                    data</button>
                 <button type="button" id="export-json-btn" class="btn btn-secondary">Download Backup JSON</button>
             </div>
         </div>
@@ -373,4 +426,5 @@
     <script src="js/bookmarklet.js"></script>
     <script src="js/app.js"></script>
 </body>
+
 </html>
