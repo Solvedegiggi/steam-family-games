@@ -198,11 +198,13 @@ window.DEMO_FAMILY_DATA = {
         {
             appid: 570,
             name: "Dota 2",
+            exclude_reason: 3,
             owner_steamids: ["76561198000000001", "76561198000000002"]
         },
         {
             appid: 230410,
             name: "Warframe",
+            exclude_reason: 3,
             owner_steamids: ["76561198000000002", "76561198000000005"]
         },
         {
@@ -218,6 +220,7 @@ window.DEMO_FAMILY_DATA = {
         {
             appid: 359550,
             name: "Tom Clancy's Rainbow Six Siege",
+            exclude_reason: 1,
             owner_steamids: ["76561198000000002", "76561198000000005"]
         },
         {
@@ -228,6 +231,7 @@ window.DEMO_FAMILY_DATA = {
         {
             appid: 1174180,
             name: "Red Dead Redemption 2",
+            exclude_reason: 1,
             owner_steamids: ["76561198000000001"]
         },
         {
@@ -253,6 +257,7 @@ window.DEMO_FAMILY_DATA = {
         {
             appid: 2073850,
             name: "THE FINALS",
+            exclude_reason: 3,
             owner_steamids: ["76561198000000001", "76561198000000005"]
         }
     ]

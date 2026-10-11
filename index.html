@@ -52,64 +52,135 @@
     <!-- Filters Panel -->
     <div id="filters-panel" class="filters-panel">
         <div class="filters-inner">
-            <!-- Mode Filter -->
-            <div class="filter-group">
-                <div class="filter-group-title">Player Modes</div>
-                <div class="filter-options">
-                    <label class="filter-chip" data-mode="singleplayer">
-                        <input type="checkbox" name="mode" value="singleplayer">
-                        <span>Single-player</span>
-                    </label>
-                    <label class="filter-chip" data-mode="multiplayer">
-                        <input type="checkbox" name="mode" value="multiplayer">
-                        <span>Multiplayer</span>
-                    </label>
-                    <label class="filter-chip" data-mode="coop">
-                        <input type="checkbox" name="mode" value="coop">
-                        <span>Co-op</span>
-                    </label>
-                    <label class="filter-chip" data-mode="local_mp">
-                        <input type="checkbox" name="mode" value="local_mp">
-                        <span>Local MP</span>
-                    </label>
-                    <label class="filter-chip" data-mode="pvp">
-                        <input type="checkbox" name="mode" value="pvp">
-                        <span>PvP</span>
-                    </label>
+            <!-- Group 1: Player Modes -->
+            <div class="filter-card">
+                <div class="filter-card-header">
+                    <span class="filter-group-title">Player Modes</span>
+                    <span class="filter-legend">
+                        <span class="legend-item"><span class="legend-icon icon-exclude">✕</span> Exclude</span>
+                        <span class="legend-item"><span class="legend-icon icon-neutral">—</span> Default</span>
+                        <span class="legend-item"><span class="legend-icon icon-include">✓</span> Only</span>
+                    </span>
+                </div>
+                <div class="filter-items-list" id="modes-filter-container">
+                    <div class="tristate-row" data-type="mode" data-key="singleplayer">
+                        <div class="tristate-label">
+                            <span class="tag-badge badge-single">Single-player</span>
+                        </div>
+                        <div class="tristate-switch">
+                            <button type="button" class="tristate-btn btn-exclude" data-state="exclude" title="Do not show Single-player">✕</button>
+                            <button type="button" class="tristate-btn btn-neutral active" data-state="neutral" title="Show normally">—</button>
+                            <button type="button" class="tristate-btn btn-include" data-state="include" title="Show only Single-player">✓</button>
+                        </div>
+                    </div>
+                    <div class="tristate-row" data-type="mode" data-key="multiplayer">
+                        <div class="tristate-label">
+                            <span class="tag-badge badge-multi">Multiplayer</span>
+                        </div>
+                        <div class="tristate-switch">
+                            <button type="button" class="tristate-btn btn-exclude" data-state="exclude" title="Do not show Multiplayer">✕</button>
+                            <button type="button" class="tristate-btn btn-neutral active" data-state="neutral" title="Show normally">—</button>
+                            <button type="button" class="tristate-btn btn-include" data-state="include" title="Show only Multiplayer">✓</button>
+                        </div>
+                    </div>
+                    <div class="tristate-row" data-type="mode" data-key="coop">
+                        <div class="tristate-label">
+                            <span class="tag-badge badge-coop">Co-op</span>
+                        </div>
+                        <div class="tristate-switch">
+                            <button type="button" class="tristate-btn btn-exclude" data-state="exclude" title="Do not show Co-op">✕</button>
+                            <button type="button" class="tristate-btn btn-neutral active" data-state="neutral" title="Show normally">—</button>
+                            <button type="button" class="tristate-btn btn-include" data-state="include" title="Show only Co-op">✓</button>
+                        </div>
+                    </div>
+                    <div class="tristate-row" data-type="mode" data-key="local_mp">
+                        <div class="tristate-label">
+                            <span class="tag-badge badge-local">Local MP</span>
+                        </div>
+                        <div class="tristate-switch">
+                            <button type="button" class="tristate-btn btn-exclude" data-state="exclude" title="Do not show Local MP">✕</button>
+                            <button type="button" class="tristate-btn btn-neutral active" data-state="neutral" title="Show normally">—</button>
+                            <button type="button" class="tristate-btn btn-include" data-state="include" title="Show only Local MP">✓</button>
+                        </div>
+                    </div>
+                    <div class="tristate-row" data-type="mode" data-key="pvp">
+                        <div class="tristate-label">
+                            <span class="tag-badge badge-pvp">PvP</span>
+                        </div>
+                        <div class="tristate-switch">
+                            <button type="button" class="tristate-btn btn-exclude" data-state="exclude" title="Do not show PvP">✕</button>
+                            <button type="button" class="tristate-btn btn-neutral active" data-state="neutral" title="Show normally">—</button>
+                            <button type="button" class="tristate-btn btn-include" data-state="include" title="Show only PvP">✓</button>
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            <!-- Family Owners Filter -->
-            <div class="filter-group">
-                <div class="filter-group-title">Family Owners</div>
-                <div class="filter-options" id="owner-filters-container">
-                    <!-- Populated dynamically -->
-                    <span style="color: var(--text-muted); font-size: 13px;">No members loaded</span>
+            <!-- Group 2: Family Owners -->
+            <div class="filter-card">
+                <div class="filter-card-header">
+                    <span class="filter-group-title">Family Owners</span>
+                </div>
+                <div class="filter-items-list" id="owner-filters-container">
+                    <span style="color: var(--text-muted); font-size: 13px;">No family members loaded</span>
                 </div>
             </div>
 
-            <!-- Copies Filter -->
-            <div class="filter-group">
-                <div class="filter-group-title">Copies in Family</div>
-                <div class="filter-options">
-                    <label class="filter-chip active" data-copies="all">
-                        <input type="radio" name="copies" value="all" checked style="display:none;">
-                        <span>Any (1+)</span>
-                    </label>
-                    <label class="filter-chip" data-copies="2">
-                        <input type="radio" name="copies" value="2" style="display:none;">
-                        <span>2+ Copies</span>
-                    </label>
-                    <label class="filter-chip" data-copies="3">
-                        <input type="radio" name="copies" value="3" style="display:none;">
-                        <span>3+ Copies</span>
-                    </label>
+            <!-- Group 3: Game Availability & Status -->
+            <div class="filter-card">
+                <div class="filter-card-header">
+                    <span class="filter-group-title">Game Availability</span>
+                </div>
+                <div class="filter-items-list" id="availability-filter-container">
+                    <div class="tristate-row" data-type="availability" data-key="not_shareable">
+                        <div class="tristate-label">
+                            <span class="tag-badge badge-warning">Not Shareable</span>
+                        </div>
+                        <div class="tristate-switch">
+                            <button type="button" class="tristate-btn btn-exclude" data-state="exclude" title="Do not show Not Shareable games">✕</button>
+                            <button type="button" class="tristate-btn btn-neutral active" data-state="neutral" title="Show normally">—</button>
+                            <button type="button" class="tristate-btn btn-include" data-state="include" title="Show only Not Shareable games">✓</button>
+                        </div>
+                    </div>
+                    <div class="tristate-row" data-type="availability" data-key="free">
+                        <div class="tristate-label">
+                            <span class="tag-badge badge-free">Free to Play</span>
+                        </div>
+                        <div class="tristate-switch">
+                            <button type="button" class="tristate-btn btn-exclude" data-state="exclude" title="Do not show Free to Play games">✕</button>
+                            <button type="button" class="tristate-btn btn-neutral active" data-state="neutral" title="Show normally">—</button>
+                            <button type="button" class="tristate-btn btn-include" data-state="include" title="Show only Free to Play games">✓</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Group 4: Copies in Family -->
+            <div class="filter-card">
+                <div class="filter-card-header">
+                    <span class="filter-group-title">Copies in Family</span>
+                </div>
+                <div class="copies-selector-wrapper">
+                    <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 8px;">Minimum copies owned:</div>
+                    <div class="copies-chips-container" id="copies-filter-container">
+                        <button type="button" class="copies-chip active" data-copies="1">Any (1+)</button>
+                        <button type="button" class="copies-chip" data-copies="2">2+ Copies</button>
+                        <button type="button" class="copies-chip" data-copies="3">3+ Copies</button>
+                        <button type="button" class="copies-chip" data-copies="4">4+ Copies</button>
+                        <button type="button" class="copies-chip" data-copies="5">5+ Copies</button>
+                        <button type="button" class="copies-chip" data-copies="6">6 Copies</button>
+                    </div>
                 </div>
             </div>
         </div>
 
         <div class="filter-actions-bar">
-            <button type="button" id="reset-filters-btn" class="btn-text">Reset all filters</button>
+            <span id="active-filters-summary" style="font-size: 13px; color: var(--text-muted); margin-right: auto; align-self: center;">
+                No filters active (showing all games)
+            </span>
+            <button type="button" id="reset-filters-btn" class="btn-text">
+                ↺ Reset all filters
+            </button>
         </div>
     </div>
 

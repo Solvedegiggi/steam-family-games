@@ -15,9 +15,21 @@
         familyData: null,
         membersMap: new Map(),
         searchQuery: '',
-        selectedModes: new Set(),
-        selectedOwners: new Set(),
-        minCopies: 1,
+        filters: {
+            modes: {
+                singleplayer: 'neutral',
+                multiplayer: 'neutral',
+                coop: 'neutral',
+                local_mp: 'neutral',
+                pvp: 'neutral'
+            },
+            owners: {},
+            availability: {
+                not_shareable: 'neutral',
+                free: 'neutral'
+            },
+            minCopies: 1
+        },
         sortColumn: 'copies',
         sortDirection: 'desc',
         filteredApps: [],
@@ -33,6 +45,7 @@
         filtersPanel: document.getElementById('filters-panel'),
         resetFiltersBtn: document.getElementById('reset-filters-btn'),
         ownerFiltersContainer: document.getElementById('owner-filters-container'),
+        activeFiltersSummary: document.getElementById('active-filters-summary'),
         statusBar: document.getElementById('status-bar'),
         familyGroupName: document.getElementById('family-group-name'),
         filteredCount: document.getElementById('filtered-count'),
@@ -161,6 +174,7 @@
     function loadFamilyData(data) {
         state.familyData = data;
         state.membersMap.clear();
+        state.filters.owners = {};
 
         const members = data.members || [];
         members.forEach(m => {
@@ -213,24 +227,27 @@
     }
 
     function renderOwnerFilters(members) {
-        elements.ownerFiltersContainer.innerHTML = '';
+        const container = elements.ownerFiltersContainer;
+        if (!container) return;
+        container.innerHTML = '';
+
         if (!members.length) {
-            elements.ownerFiltersContainer.innerHTML = '<span style="color:var(--text-muted);font-size:13px;">No members</span>';
+            container.innerHTML = '<span style="color:var(--text-muted);font-size:13px;">No members</span>';
             return;
         }
 
         members.forEach(m => {
-            const label = document.createElement('label');
-            label.className = 'filter-chip';
-            label.setAttribute('data-steamid', m.steamid);
-            if (state.selectedOwners.has(String(m.steamid))) {
-                label.classList.add('active');
-            }
+            const sid = String(m.steamid);
+            const currentState = state.filters.owners[sid] || 'neutral';
+            state.filters.owners[sid] = currentState;
 
-            const chk = document.createElement('input');
-            chk.type = 'checkbox';
-            chk.value = m.steamid;
-            chk.checked = state.selectedOwners.has(String(m.steamid));
+            const row = document.createElement('div');
+            row.className = 'tristate-row';
+            row.setAttribute('data-type', 'owner');
+            row.setAttribute('data-key', sid);
+
+            const labelDiv = document.createElement('div');
+            labelDiv.className = 'tristate-label';
 
             const img = document.createElement('img');
             img.src = m.avatar_url || 'https://avatars.steamstatic.com/fef49e7fa7e1997310d705b2a6158ff8dc1cdfeb_medium.jpg';
@@ -238,29 +255,44 @@
             img.onerror = () => { img.src = 'https://avatars.steamstatic.com/fef49e7fa7e1997310d705b2a6158ff8dc1cdfeb_medium.jpg'; };
 
             const span = document.createElement('span');
+            span.className = 'owner-name-text';
             span.textContent = m.name;
+            span.title = m.name;
 
-            label.appendChild(chk);
-            label.appendChild(img);
-            label.appendChild(span);
+            labelDiv.appendChild(img);
+            labelDiv.appendChild(span);
 
-            label.addEventListener('click', (e) => {
-                e.preventDefault();
-                const sid = String(m.steamid);
-                if (state.selectedOwners.has(sid)) {
-                    state.selectedOwners.delete(sid);
-                    label.classList.remove('active');
-                    chk.checked = false;
-                } else {
-                    state.selectedOwners.add(sid);
-                    label.classList.add('active');
-                    chk.checked = true;
-                }
-                updateFilterCounter();
-                applyFilters();
-            });
+            const switchDiv = document.createElement('div');
+            switchDiv.className = 'tristate-switch';
 
-            elements.ownerFiltersContainer.appendChild(label);
+            const btnExclude = document.createElement('button');
+            btnExclude.type = 'button';
+            btnExclude.className = 'tristate-btn btn-exclude' + (currentState === 'exclude' ? ' active' : '');
+            btnExclude.setAttribute('data-state', 'exclude');
+            btnExclude.title = `Do not show games owned by ${m.name}`;
+            btnExclude.textContent = '✕';
+
+            const btnNeutral = document.createElement('button');
+            btnNeutral.type = 'button';
+            btnNeutral.className = 'tristate-btn btn-neutral' + (currentState === 'neutral' ? ' active' : '');
+            btnNeutral.setAttribute('data-state', 'neutral');
+            btnNeutral.title = `Show normally`;
+            btnNeutral.textContent = '—';
+
+            const btnInclude = document.createElement('button');
+            btnInclude.type = 'button';
+            btnInclude.className = 'tristate-btn btn-include' + (currentState === 'include' ? ' active' : '');
+            btnInclude.setAttribute('data-state', 'include');
+            btnInclude.title = `Show only games owned by ${m.name}`;
+            btnInclude.textContent = '✓';
+
+            switchDiv.appendChild(btnExclude);
+            switchDiv.appendChild(btnNeutral);
+            switchDiv.appendChild(btnInclude);
+
+            row.appendChild(labelDiv);
+            row.appendChild(switchDiv);
+            container.appendChild(row);
         });
     }
 
@@ -272,8 +304,13 @@
         if (!state.familyData || !state.familyData.apps) return;
 
         const q = state.searchQuery.toLowerCase().trim();
-        const hasModes = state.selectedModes.size > 0;
-        const hasOwners = state.selectedOwners.size > 0;
+        const f = state.filters;
+
+        const excludeModes = Object.entries(f.modes).filter(([_, s]) => s === 'exclude').map(([k]) => k);
+        const includeModes = Object.entries(f.modes).filter(([_, s]) => s === 'include').map(([k]) => k);
+
+        const excludeOwners = Object.entries(f.owners).filter(([_, s]) => s === 'exclude').map(([k]) => k);
+        const includeOwners = Object.entries(f.owners).filter(([_, s]) => s === 'include').map(([k]) => k);
 
         let filtered = state.familyData.apps.filter(app => {
             // Search Query Filter
@@ -283,22 +320,36 @@
 
             // Min Copies Filter
             const copiesCount = (app.owner_steamids || []).length;
-            if (copiesCount < state.minCopies) {
+            if (copiesCount < f.minCopies) {
                 return false;
             }
 
+            // Availability Filter
+            const isNotShareable = app.exclude_reason === 1;
+            const isFree = app.exclude_reason === 3;
+
+            if (f.availability.not_shareable === 'exclude' && isNotShareable) return false;
+            if (f.availability.not_shareable === 'include' && !isNotShareable) return false;
+
+            if (f.availability.free === 'exclude' && isFree) return false;
+            if (f.availability.free === 'include' && !isFree) return false;
+
             // Owners Filter
-            if (hasOwners) {
-                const owns = (app.owner_steamids || []).some(sid => state.selectedOwners.has(String(sid)));
-                if (!owns) return false;
+            const owners = (app.owner_steamids || []).map(String);
+            if (excludeOwners.length > 0) {
+                if (owners.some(sid => excludeOwners.includes(sid))) return false;
+            }
+            if (includeOwners.length > 0) {
+                if (!owners.some(sid => includeOwners.includes(sid))) return false;
             }
 
             // Player Modes Filter
-            if (hasModes) {
-                const tags = window.categoriesService ? window.categoriesService.getCategories(app.appid) : [];
-                // Check if any selected mode matches the game's categories
-                const matchesMode = Array.from(state.selectedModes).some(m => tags.includes(m));
-                if (!matchesMode) return false;
+            const tags = window.categoriesService ? window.categoriesService.getCategories(app.appid) : [];
+            if (excludeModes.length > 0) {
+                if (excludeModes.some(m => tags.includes(m))) return false;
+            }
+            if (includeModes.length > 0) {
+                if (!includeModes.every(m => tags.includes(m))) return false;
             }
 
             return true;
@@ -349,19 +400,59 @@
     }
 
     function updateFilterCounter() {
+        const f = state.filters;
         let count = 0;
-        count += state.selectedModes.size;
-        count += state.selectedOwners.size;
-        if (state.minCopies > 1) count += 1;
+
+        Object.values(f.modes).forEach(s => { if (s !== 'neutral') count++; });
+        Object.values(f.owners).forEach(s => { if (s !== 'neutral') count++; });
+        Object.values(f.availability).forEach(s => { if (s !== 'neutral') count++; });
+        if (f.minCopies > 1) count++;
 
         if (count > 0) {
             elements.filterBadgeCounter.textContent = count;
             elements.filterBadgeCounter.style.display = 'inline-block';
             elements.filtersToggleBtn.classList.add('active');
+            if (elements.activeFiltersSummary) {
+                elements.activeFiltersSummary.textContent = `${count} active filter${count > 1 ? 's' : ''}`;
+                elements.activeFiltersSummary.style.color = 'var(--steam-blue)';
+            }
         } else {
             elements.filterBadgeCounter.style.display = 'none';
             elements.filtersToggleBtn.classList.remove('active');
+            if (elements.activeFiltersSummary) {
+                elements.activeFiltersSummary.textContent = 'No filters active (showing all games)';
+                elements.activeFiltersSummary.style.color = 'var(--text-muted)';
+            }
         }
+    }
+
+    function resetFilters(keepSearch = false) {
+        Object.keys(state.filters.modes).forEach(k => { state.filters.modes[k] = 'neutral'; });
+        Object.keys(state.filters.owners).forEach(k => { state.filters.owners[k] = 'neutral'; });
+        state.filters.availability.not_shareable = 'neutral';
+        state.filters.availability.free = 'neutral';
+        state.filters.minCopies = 1;
+
+        if (!keepSearch) {
+            state.searchQuery = '';
+            if (elements.searchInput) elements.searchInput.value = '';
+            if (elements.searchClearBtn) elements.searchClearBtn.style.display = 'none';
+        }
+
+        if (elements.filtersPanel) {
+            elements.filtersPanel.querySelectorAll('.tristate-row').forEach(row => {
+                row.querySelectorAll('.tristate-btn').forEach(btn => {
+                    btn.classList.toggle('active', btn.getAttribute('data-state') === 'neutral');
+                });
+            });
+
+            elements.filtersPanel.querySelectorAll('.copies-chip').forEach(chip => {
+                chip.classList.toggle('active', chip.getAttribute('data-copies') === '1');
+            });
+        }
+
+        updateFilterCounter();
+        applyFilters();
     }
 
     // =========================================================================
@@ -558,57 +649,59 @@
             elements.filtersPanel.classList.toggle('open');
         });
 
-        // Mode Filters
-        document.querySelectorAll('.filter-chip[data-mode]').forEach(chip => {
-            chip.addEventListener('click', (e) => {
-                e.preventDefault();
-                const mode = chip.getAttribute('data-mode');
-                const chk = chip.querySelector('input');
-                if (state.selectedModes.has(mode)) {
-                    state.selectedModes.delete(mode);
-                    chip.classList.remove('active');
-                    if (chk) chk.checked = false;
-                } else {
-                    state.selectedModes.add(mode);
-                    chip.classList.add('active');
-                    if (chk) chk.checked = true;
-                }
-                updateFilterCounter();
-                applyFilters();
-            });
-        });
+        // Tri-state Filters and Copies Filter Delegation
+        if (elements.filtersPanel) {
+            elements.filtersPanel.addEventListener('click', (e) => {
+                const tristateBtn = e.target.closest('.tristate-btn');
+                if (tristateBtn) {
+                    e.preventDefault();
+                    const row = tristateBtn.closest('.tristate-row');
+                    if (!row) return;
 
-        // Copies Filter
-        document.querySelectorAll('.filter-chip[data-copies]').forEach(chip => {
-            chip.addEventListener('click', (e) => {
-                e.preventDefault();
-                document.querySelectorAll('.filter-chip[data-copies]').forEach(c => c.classList.remove('active'));
-                chip.classList.add('active');
-                const val = chip.getAttribute('data-copies');
-                state.minCopies = val === 'all' ? 1 : parseInt(val, 10);
-                updateFilterCounter();
-                applyFilters();
+                    const type = row.getAttribute('data-type');
+                    const key = row.getAttribute('data-key');
+                    const targetState = tristateBtn.getAttribute('data-state');
+
+                    if (type && key && targetState) {
+                        if (type === 'mode') {
+                            state.filters.modes[key] = targetState;
+                        } else if (type === 'owner') {
+                            state.filters.owners[key] = targetState;
+                        } else if (type === 'availability') {
+                            state.filters.availability[key] = targetState;
+                        }
+
+                        row.querySelectorAll('.tristate-btn').forEach(b => b.classList.remove('active'));
+                        tristateBtn.classList.add('active');
+
+                        updateFilterCounter();
+                        applyFilters();
+                    }
+                    return;
+                }
+
+                const copiesChip = e.target.closest('.copies-chip');
+                if (copiesChip) {
+                    e.preventDefault();
+                    elements.filtersPanel.querySelectorAll('.copies-chip').forEach(c => c.classList.remove('active'));
+                    copiesChip.classList.add('active');
+
+                    const val = parseInt(copiesChip.getAttribute('data-copies'), 10) || 1;
+                    state.filters.minCopies = val;
+
+                    updateFilterCounter();
+                    applyFilters();
+                    return;
+                }
             });
-        });
+        }
 
         // Reset Filters Button
-        elements.resetFiltersBtn.addEventListener('click', () => {
-            state.selectedModes.clear();
-            state.selectedOwners.clear();
-            state.minCopies = 1;
-            state.searchQuery = '';
-            elements.searchInput.value = '';
-            elements.searchClearBtn.style.display = 'none';
-
-            document.querySelectorAll('.filter-chip[data-mode]').forEach(c => c.classList.remove('active'));
-            document.querySelectorAll('#owner-filters-container .filter-chip').forEach(c => c.classList.remove('active'));
-            document.querySelectorAll('.filter-chip[data-copies]').forEach(c => {
-                c.classList.toggle('active', c.getAttribute('data-copies') === 'all');
+        if (elements.resetFiltersBtn) {
+            elements.resetFiltersBtn.addEventListener('click', () => {
+                resetFilters();
             });
-
-            updateFilterCounter();
-            applyFilters();
-        });
+        }
 
         // Sort Headers
         document.querySelectorAll('th.sortable').forEach(th => {
@@ -738,6 +831,7 @@
             if (confirm('Clear saved family library from this browser?')) {
                 localStorage.removeItem(STORAGE_KEY);
                 state.familyData = null;
+                resetFilters();
                 showEmptyState();
                 closeModal();
             }
