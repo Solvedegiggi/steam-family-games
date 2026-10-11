@@ -184,7 +184,8 @@
                     ...app,
                     appid: id,
                     owner_steamids: new Set((app.owner_steamids || []).map(String)),
-                    exclude_reason: app.exclude_reason || 0
+                    exclude_reason: app.exclude_reason || 0,
+                    categories: Array.isArray(app.categories) ? [...app.categories] : []
                 });
             } else {
                 const existing = appMap.get(id);
@@ -195,6 +196,9 @@
                 }
                 if (!existing.capsule_url && app.capsule_url) {
                     existing.capsule_url = app.capsule_url;
+                }
+                if ((!existing.categories || existing.categories.length === 0) && Array.isArray(app.categories) && app.categories.length > 0) {
+                    existing.categories = [...app.categories];
                 }
             }
         });
@@ -283,6 +287,22 @@
                 state.ownerGameCounts.set(s, (state.ownerGameCounts.get(s) || 0) + 1);
             });
         });
+
+        // Populate CategoriesService with any categories present in loaded data
+        if (window.categoriesService) {
+            const batch = {};
+            if (data.categories && typeof data.categories === 'object') {
+                for (const [aid, tags] of Object.entries(data.categories)) {
+                    if (Array.isArray(tags) && tags.length > 0) batch[aid] = tags;
+                }
+            }
+            (data.apps || []).forEach(app => {
+                if (Array.isArray(app.categories) && app.categories.length > 0) {
+                    batch[app.appid] = app.categories;
+                }
+            });
+            window.categoriesService.setCategoriesBatch(batch);
+        }
 
         const sortedMembers = sortMembers(members);
 
@@ -482,7 +502,9 @@
             }
 
             // Player Modes Filter
-            const tags = window.categoriesService ? window.categoriesService.getCategories(app.appid) : [];
+            const tags = (Array.isArray(app.categories) && app.categories.length > 0)
+                ? app.categories
+                : (window.categoriesService ? window.categoriesService.getCategories(app.appid) : []);
             if (excludeModes.length > 0) {
                 if (excludeModes.some(m => tags.includes(m))) return false;
             }
@@ -633,7 +655,9 @@
     function createTableRow(app) {
         const tr = document.createElement('tr');
         const copies = (app.owner_steamids || []).length;
-        const categories = window.categoriesService ? window.categoriesService.getCategories(app.appid) : [];
+        const categories = (Array.isArray(app.categories) && app.categories.length > 0)
+            ? app.categories
+            : (window.categoriesService ? window.categoriesService.getCategories(app.appid) : []);
 
         // 1. Column: Name & Capsule
         const tdName = document.createElement('td');

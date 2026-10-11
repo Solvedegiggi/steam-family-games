@@ -115,8 +115,9 @@ window.generateBookmarkletCode = function(targetSiteUrl) {
         const aData = await aResp.json();
         const rawApps = aData?.response?.apps || [];
 
-        updateHud('Resolving official game capsule art...');
+        updateHud('Resolving official game capsule art &amp; player tags...');
         let assetMap = {};
+        let categoriesMap = {};
         if (rawApps.length > 0) {
             try {
                 const chunkArray = (arr, size) => Array.from({ length: Math.ceil(arr.length / size) }, (v, i) => arr.slice(i * size, i * size + size));
@@ -126,7 +127,7 @@ window.generateBookmarkletCode = function(targetSiteUrl) {
                     const payload = {
                         ids: chunk.map(id => ({ appid: id })),
                         context: { language: 'english', country_code: 'US' },
-                        data_request: { include_assets: true }
+                        data_request: { include_assets: true, include_categories: true }
                     };
                     const url = 'https://api.steampowered.com/IStoreBrowseService/GetItems/v1/?access_token=' + encodeURIComponent(token) + '&input_json=' + encodeURIComponent(JSON.stringify(payload));
                     const res = await fetch(url);
@@ -140,11 +141,27 @@ window.generateBookmarkletCode = function(targetSiteUrl) {
                                     assetMap[item.id] = 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/' + item.id + '/' + relPath;
                                 }
                             }
+                            if (item.categories) {
+                                const cIds = new Set([
+                                    ...(item.categories.supported_player_categoryids || []),
+                                    ...(item.categories.feature_categoryids || [])
+                                ]);
+                                const tags = [];
+                                if (cIds.has(2)) tags.push('singleplayer');
+                                if (cIds.has(1) || cIds.has(36) || cIds.has(38) || cIds.has(49) || cIds.has(9) || cIds.has(24) || cIds.has(37) || cIds.has(39)) tags.push('multiplayer');
+                                if (cIds.has(9) || cIds.has(38) || cIds.has(39) || cIds.has(48)) tags.push('coop');
+                                if (cIds.has(24) || cIds.has(37) || cIds.has(39) || cIds.has(44) || cIds.has(47) || cIds.has(48)) tags.push('local_mp');
+                                if (cIds.has(49) || cIds.has(36) || cIds.has(37) || cIds.has(47)) tags.push('pvp');
+                                if (cIds.has(27)) tags.push('crossplay');
+                                if (tags.length > 0) {
+                                    categoriesMap[item.id] = tags;
+                                }
+                            }
                         });
                     }
                 }));
             } catch(e) {
-                console.warn('Could not fetch store assets:', e);
+                console.warn('Could not fetch store assets/categories:', e);
             }
         }
 
@@ -158,7 +175,8 @@ window.generateBookmarkletCode = function(targetSiteUrl) {
                     name: app.name,
                     owner_steamids: new Set((app.owner_steamids || []).map(String)),
                     exclude_reason: app.exclude_reason || 0,
-                    capsule_url: assetMap[id] || null
+                    capsule_url: assetMap[id] || null,
+                    categories: categoriesMap[id] || []
                 });
             } else {
                 const existing = appMap.get(id);
@@ -168,6 +186,9 @@ window.generateBookmarkletCode = function(targetSiteUrl) {
                 }
                 if (!existing.capsule_url && assetMap[id]) {
                     existing.capsule_url = assetMap[id];
+                }
+                if ((!existing.categories || existing.categories.length === 0) && categoriesMap[id]) {
+                    existing.categories = categoriesMap[id];
                 }
             }
         });
@@ -183,6 +204,7 @@ window.generateBookmarkletCode = function(targetSiteUrl) {
             current_user_steamid: currentSteamId,
             members: memberProfiles,
             apps: formattedApps,
+            categories: categoriesMap,
             exported_at: Date.now()
         };
 

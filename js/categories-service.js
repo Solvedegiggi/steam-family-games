@@ -63,8 +63,24 @@ class CategoriesService {
     }
 
     setCategories(appid, tags) {
+        if (!Array.isArray(tags) || !tags.length) return;
         this.cache.set(String(appid), tags);
         this.saveLocalCache();
+    }
+
+    setCategoriesBatch(entries) {
+        if (!entries) return;
+        const items = Array.isArray(entries) ? entries : Object.entries(entries);
+        let changed = false;
+        for (const [appid, tags] of items) {
+            if (Array.isArray(tags) && tags.length > 0) {
+                this.cache.set(String(appid), tags);
+                changed = true;
+            }
+        }
+        if (changed) {
+            this.saveLocalCache();
+        }
     }
 
     /**
