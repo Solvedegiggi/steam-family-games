@@ -106,7 +106,7 @@ window.generateBookmarkletCode = function(targetSiteUrl) {
             });
 
             updateHud('Downloading shared library apps...');
-            const appsUrl = 'https://api.steampowered.com/IFamilyGroupsService/GetSharedLibraryApps/v1/?access_token=' + encodeURIComponent(token) + '&family_groupid=' + encodeURIComponent(familyGroupId) + '&include_own=true&include_excluded=false&include_non_games=false';
+            const appsUrl = 'https://api.steampowered.com/IFamilyGroupsService/GetSharedLibraryApps/v1/?access_token=' + encodeURIComponent(token) + '&family_groupid=' + encodeURIComponent(familyGroupId) + '&include_own=true&include_excluded=true&include_non_games=false';
             const aResp = await fetch(appsUrl);
             const aData = await aResp.json();
             const rawApps = aData?.response?.apps || [];
@@ -114,7 +114,8 @@ window.generateBookmarkletCode = function(targetSiteUrl) {
             const formattedApps = rawApps.map(app => ({
                 appid: app.appid,
                 name: app.name,
-                owner_steamids: (app.owner_steamids || []).map(String)
+                owner_steamids: (app.owner_steamids || []).map(String),
+                exclude_reason: app.exclude_reason || 0
             }));
 
             const finalPayload = {

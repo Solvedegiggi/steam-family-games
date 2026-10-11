@@ -498,6 +498,35 @@ a:hover {
     flex-shrink: 0;
 }
 
+.game-capsule-placeholder {
+    width: 64px;
+    height: 30px;
+    border-radius: 4px;
+    background: #111a26;
+    border: 1px solid var(--border-color);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-muted);
+    flex-shrink: 0;
+}
+
+.badge-warning {
+    background: rgba(180, 110, 20, 0.35);
+    color: #f6ad55;
+    border-color: #7b4a12;
+    font-size: 10px;
+    padding: 1px 6px;
+}
+
+.badge-free {
+    background: rgba(40, 140, 180, 0.35);
+    color: #76e4f7;
+    border-color: #1a5b74;
+    font-size: 10px;
+    padding: 1px 6px;
+}
+
 .game-name-link {
     font-weight: 600;
     color: var(--text-primary);

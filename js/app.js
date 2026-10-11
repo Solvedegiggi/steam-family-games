@@ -402,19 +402,36 @@
         // 1. Column: Name & Capsule
         const tdName = document.createElement('td');
         tdName.className = 'col-name';
-        const capsuleUrl = `https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/${app.appid}/capsule_sm_120.jpg`;
-        const fallbackUrl = `https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/${app.appid}/header.jpg`;
+        const u1 = `https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/${app.appid}/capsule_sm_120.jpg`;
+        const u2 = `https://cdn.akamai.steamstatic.com/steam/apps/${app.appid}/capsule_231x87.jpg`;
+        const u3 = `https://cdn.akamai.steamstatic.com/steam/apps/${app.appid}/header.jpg`;
         
+        let excludeBadgeHtml = '';
+        if (app.exclude_reason === 1) {
+            excludeBadgeHtml = '<span class="tag-badge badge-warning" title="Publisher restricted this game from Steam Family Sharing">Not Shareable</span>';
+        } else if (app.exclude_reason === 3) {
+            excludeBadgeHtml = '<span class="tag-badge badge-free" title="Free to play">Free</span>';
+        }
+
         tdName.innerHTML = `
             <div class="game-title-cell">
                 <img class="game-capsule-img" 
-                     src="${capsuleUrl}" 
+                     src="${u1}" 
                      alt="${escapeHtml(app.name)}"
                      loading="lazy" 
-                     onerror="if (this.src !== '${fallbackUrl}') { this.src = '${fallbackUrl}'; } else { this.style.display='none'; }">
-                <a class="game-name-link" href="https://store.steampowered.com/app/${app.appid}/" target="_blank" rel="noopener">
-                    ${escapeHtml(app.name)}
-                </a>
+                     data-fallback="1"
+                     onerror="if (this.dataset.fallback === '1') { this.dataset.fallback = '2'; this.src = '${u2}'; } else if (this.dataset.fallback === '2') { this.dataset.fallback = '3'; this.src = '${u3}'; } else { this.style.display='none'; this.nextElementSibling.style.display='inline-flex'; }">
+                <div class="game-capsule-placeholder" style="display:none;" title="${escapeHtml(app.name)}">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M11.979 0C5.678 0 .511 4.86.022 11.037l6.432 2.658c.545-.371 1.203-.59 1.912-.59.063 0 .125.004.188.006l2.861-4.142V8.91c0-2.495 2.028-4.524 4.524-4.524 2.494 0 4.524 2.031 4.524 4.527s-2.03 4.525-4.524 4.525h-.105l-4.076 2.911c0 .052.004.105.004.159 0 1.875-1.515 3.396-3.39 3.396-1.635 0-3.016-1.173-3.331-2.704L.488 15.01C1.933 20.158 6.64 24 12.213 24c6.627 0 12-5.373 12-12S18.607 0 11.979 0z"/>
+                    </svg>
+                </div>
+                <div style="display:flex; flex-direction:column; gap:4px;">
+                    <a class="game-name-link" href="https://store.steampowered.com/app/${app.appid}/" target="_blank" rel="noopener">
+                        ${escapeHtml(app.name)}
+                    </a>
+                    ${excludeBadgeHtml ? `<div>${excludeBadgeHtml}</div>` : ''}
+                </div>
             </div>
         `;
         tr.appendChild(tdName);
