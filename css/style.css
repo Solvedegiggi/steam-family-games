@@ -1184,15 +1184,15 @@ a:hover {
     color: var(--text-primary);
 }
 
-.step-content a,
-.tab-pane a {
+.step-content a:not(.bookmarklet-pill):not(.btn),
+.tab-pane a:not(.bookmarklet-pill):not(.btn) {
     color: var(--steam-blue);
     text-decoration: underline;
     font-weight: 500;
 }
 
-.step-content a:hover,
-.tab-pane a:hover {
+.step-content a:not(.bookmarklet-pill):not(.btn):hover,
+.tab-pane a:not(.bookmarklet-pill):not(.btn):hover {
     color: var(--steam-blue-light);
 }
 

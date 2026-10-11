@@ -6,7 +6,9 @@
 window.generateBookmarkletCode = function(targetSiteUrl) {
     const rawScript = `(async function() {
     if (!location.hostname.includes('steampowered.com')) {
-        alert('👉 Please run this on store.steampowered.com while logged in to Steam!\\n\\nOpen store.steampowered.com and click the bookmark there.');
+        if (confirm('👉 To sync your Steam Family library, this bookmark runs on store.steampowered.com where your Steam session is active.\n\nClick OK to go to store.steampowered.com now, then click this bookmark again to sync!')) {
+            window.location.href = 'https://store.steampowered.com';
+        }
         return;
     }
 
