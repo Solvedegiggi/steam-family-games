@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>steamgames - Family Library</title>
+    <link rel="icon" type="image/svg+xml" href="https://cdn.jsdelivr.net/npm/simple-icons@v13/icons/steam.svg">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <!-- Header Navigation -->
+    <header class="app-header">
+        <div class="header-inner">
+            <a href="#" class="brand-section" id="brand-link">
+                <!-- Steam Logo SVG -->
+                <svg class="brand-logo-icon" viewBox="0 0 24 24">
+                    <path d="M11.979 0C5.678 0 .511 4.86.022 11.037l6.432 2.658c.545-.371 1.203-.59 1.912-.59.063 0 .125.004.188.006l2.861-4.142V8.91c0-2.495 2.028-4.524 4.524-4.524 2.494 0 4.524 2.031 4.524 4.527s-2.03 4.525-4.524 4.525h-.105l-4.076 2.911c0 .052.004.105.004.159 0 1.875-1.515 3.396-3.39 3.396-1.635 0-3.016-1.173-3.331-2.704L.488 15.01C1.933 20.158 6.64 24 12.213 24c6.627 0 12-5.373 12-12S18.607 0 11.979 0zM7.541 18.233c-.394.887-1.396 1.309-2.283.916-.887-.394-1.309-1.396-.916-2.283.394-.887 1.396-1.309 2.283-.916.887.394 1.309 1.396.916 2.283zm8.4-9.324c-1.392 0-2.525-1.134-2.525-2.527 0-1.392 1.133-2.525 2.525-2.525 1.394 0 2.527 1.133 2.527 2.525 0 1.393-1.133 2.527-2.527 2.527zm-7.39 8.243c0 .883-.717 1.6-1.6 1.6s-1.6-.717-1.6-1.6c0-.883.717-1.6 1.6-1.6s1.6.717 1.6 1.6z"/>
+                </svg>
+                <div class="brand-title">steam<span>games</span></div>
+            </a>
+
+            <!-- Search Bar -->
+            <div class="search-container">
+                <svg class="search-icon" viewBox="0 0 24 24">
+                    <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+                </svg>
+                <input type="text" id="search-input" class="search-input" placeholder="Search games by title..." autocomplete="off">
+                <button type="button" id="search-clear-btn" class="search-clear-btn" title="Clear search">✕</button>
+            </div>
+
+            <!-- Header Actions -->
+            <div class="header-actions">
+                <button type="button" id="filters-toggle-btn" class="btn btn-secondary">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M10 18h4v-2h-4v2zM3 6v2h18V6H3zm3 7h12v-2H6v2z"/>
+                    </svg>
+                    <span>Filters</span>
+                    <span id="filter-badge-counter" class="filter-badge-counter">0</span>
+                </button>
+
+                <button type="button" id="sync-modal-btn" class="btn btn-primary">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/>
+                    </svg>
+                    <span id="sync-btn-label">Sync / Login</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Filters Panel -->
+    <div id="filters-panel" class="filters-panel">
+        <div class="filters-inner">
+            <!-- Mode Filter -->
+            <div class="filter-group">
+                <div class="filter-group-title">Player Modes</div>
+                <div class="filter-options">
+                    <label class="filter-chip" data-mode="singleplayer">
+                        <input type="checkbox" name="mode" value="singleplayer">
+                        <span>Single-player</span>
+                    </label>
+                    <label class="filter-chip" data-mode="multiplayer">
+                        <input type="checkbox" name="mode" value="multiplayer">
+                        <span>Multiplayer</span>
+                    </label>
+                    <label class="filter-chip" data-mode="coop">
+                        <input type="checkbox" name="mode" value="coop">
+                        <span>Co-op</span>
+                    </label>
+                    <label class="filter-chip" data-mode="local_mp">
+                        <input type="checkbox" name="mode" value="local_mp">
+                        <span>Local MP</span>
+                    </label>
+                    <label class="filter-chip" data-mode="pvp">
+                        <input type="checkbox" name="mode" value="pvp">
+                        <span>PvP</span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Family Owners Filter -->
+            <div class="filter-group">
+                <div class="filter-group-title">Family Owners</div>
+                <div class="filter-options" id="owner-filters-container">
+                    <!-- Populated dynamically -->
+                    <span style="color: var(--text-muted); font-size: 13px;">No members loaded</span>
+                </div>
+            </div>
+
+            <!-- Copies Filter -->
+            <div class="filter-group">
+                <div class="filter-group-title">Copies in Family</div>
+                <div class="filter-options">
+                    <label class="filter-chip active" data-copies="all">
+                        <input type="radio" name="copies" value="all" checked style="display:none;">
+                        <span>Any (1+)</span>
+                    </label>
+                    <label class="filter-chip" data-copies="2">
+                        <input type="radio" name="copies" value="2" style="display:none;">
+                        <span>2+ Copies</span>
+                    </label>
+                    <label class="filter-chip" data-copies="3">
+                        <input type="radio" name="copies" value="3" style="display:none;">
+                        <span>3+ Copies</span>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <div class="filter-actions-bar">
+            <button type="button" id="reset-filters-btn" class="btn-text">Reset all filters</button>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="app-main">
+        <!-- Status Bar -->
+        <div id="status-bar" class="status-bar" style="display: none;">
+            <div class="status-summary">
+                <span>Family: <strong id="family-group-name" class="status-highlight">Steam Family</strong></span>
+                <span>•</span>
+                <span>Showing <strong id="filtered-count" class="status-highlight">0</strong> of <strong id="total-count">0</strong> games</span>
+            </div>
+            <div id="family-members-pill-list" style="display: flex; gap: 8px; align-items: center;"></div>
+        </div>
+
+        <!-- Table View -->
+        <div id="table-card" class="table-card" style="display: none;">
+            <div class="table-responsive">
+                <table class="games-table">
+                    <thead>
+                        <tr>
+                            <th class="col-name sortable" data-sort="name">
+                                Game Name <span class="sort-icon" id="sort-icon-name">▲</span>
+                            </th>
+                            <th class="col-players">Players</th>
+                            <th class="col-owners">Owners</th>
+                            <th class="col-copies sortable" data-sort="copies">
+                                Copies <span class="sort-icon" id="sort-icon-copies">▼</span>
+                            </th>
+                            <th class="col-links">Links</th>
+                        </tr>
+                    </thead>
+                    <tbody id="games-table-body">
+                        <!-- Populated dynamically via infinite scroll -->
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Infinite Scroll Sentinel -->
+            <div id="scroll-sentinel" class="scroll-sentinel" style="display: none;">
+                <div class="loading-spinner"></div>
+                <span>Loading more games...</span>
+            </div>
+        </div>
+
+        <!-- Empty State (No library loaded) -->
+        <div id="empty-state" class="empty-state-card">
+            <svg class="empty-icon" viewBox="0 0 24 24">
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 14h-2v-2h2v2zm0-4h-2V7h2v5z"/>
+            </svg>
+            <h2 class="empty-title">Explore Your Steam Family Library</h2>
+            <p class="empty-desc">
+                View all shared games in your Steam Family Group with real-time multiplayer tags, owner profiles, and copy tracking in a sleek SteamDB-style dashboard.
+            </p>
+            <div class="empty-actions">
+                <button type="button" id="empty-sync-btn" class="btn btn-primary">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
+                    </svg>
+                    <span>Sync Your Steam Family</span>
+                </button>
+                <button type="button" id="load-demo-btn" class="btn btn-secondary">
+                    <span>Preview Demo Library</span>
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal Dialog: Sync / Login / Import -->
+    <div id="sync-modal" class="modal-backdrop">
+        <div class="modal-box">
+            <div class="modal-header">
+                <h3 class="modal-title">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="var(--steam-blue)">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/>
+                    </svg>
+                    <span>Sync Steam Family Library</span>
+                </h3>
+                <button type="button" id="modal-close-btn" class="modal-close-btn">&times;</button>
+            </div>
+
+            <!-- Modal Tabs -->
+            <div class="modal-tabs">
+                <button type="button" class="modal-tab-btn active" data-tab="tab-bookmarklet">⭐ Bookmarklet (1-Click)</button>
+                <button type="button" class="modal-tab-btn" data-tab="tab-snippet">💻 Console Snippet</button>
+                <button type="button" class="modal-tab-btn" data-tab="tab-file">📁 Drop JSON File</button>
+            </div>
+
+            <div class="modal-body">
+                <!-- Tab 1: Bookmarklet -->
+                <div id="tab-bookmarklet" class="tab-pane active">
+                    <div class="steps-list">
+                        <div class="step-item">
+                            <div class="step-num">1</div>
+                            <div class="step-content">
+                                <strong>Drag this button to your Bookmarks Bar:</strong>
+                                <div class="bookmarklet-drag-zone">
+                                    <a href="#" id="bookmarklet-link" class="bookmarklet-pill" title="Drag me to your Bookmarks bar">
+                                        ⭐ Sync Steam Family
+                                    </a>
+                                    <div style="font-size: 12px; color: var(--text-muted); margin-top: 8px;">
+                                        (Or right-click &rarr; "Bookmark this link")
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="step-item">
+                            <div class="step-num">2</div>
+                            <div class="step-content">
+                                Go to <a href="https://store.steampowered.com" target="_blank" rel="noopener">store.steampowered.com</a> in your browser (make sure you are logged in).
+                            </div>
+                        </div>
+
+                        <div class="step-item">
+                            <div class="step-num">3</div>
+                            <div class="step-content">
+                                Click the <strong>Sync Steam Family</strong> bookmark in your bookmarks bar. It will automatically gather your family library and redirect straight back here!
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tab 2: Console Snippet -->
+                <div id="tab-snippet" class="tab-pane">
+                    <p style="color: var(--text-secondary); margin-bottom: 12px;">
+                        Prefer running it manually? Open <a href="https://store.steampowered.com" target="_blank" rel="noopener">store.steampowered.com</a>, press <kbd>F12</kbd> &rarr; <strong>Console</strong>, and paste this 1-line script:
+                    </p>
+                    <div class="code-box" id="snippet-code-box"></div>
+                    <button type="button" id="copy-snippet-btn" class="btn btn-secondary" style="width: 100%; justify-content: center;">
+                        <span>📋 Copy Script to Clipboard</span>
+                    </button>
+                </div>
+
+                <!-- Tab 3: JSON File Drop -->
+                <div id="tab-file" class="tab-pane">
+                    <p style="color: var(--text-secondary); margin-bottom: 14px;">
+                        Drop your exported <code>family_games.json</code> file here, or paste raw JSON data:
+                    </p>
+                    <div id="dropzone" class="dropzone">
+                        <svg width="36" height="36" viewBox="0 0 24 24" fill="var(--steam-blue)">
+                            <path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM14 13v4h-4v-4H7l5-5 5 5h-3z"/>
+                        </svg>
+                        <div class="dropzone-text">Drag & drop <strong>family_games.json</strong> here, or click to browse</div>
+                        <input type="file" id="file-input" class="file-input" accept=".json,application/json">
+                    </div>
+                    <textarea id="json-paste-input" class="search-input" style="height: 90px; padding: 10px; font-family: var(--font-mono); font-size: 12px;" placeholder="Or paste JSON content here..."></textarea>
+                    <button type="button" id="import-pasted-json-btn" class="btn btn-secondary" style="margin-top: 10px; width: 100%; justify-content: center;">
+                        <span>Load Pasted JSON</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" id="clear-data-btn" class="btn-text" style="color: #ff6b6b;">Clear saved data</button>
+                <button type="button" id="export-json-btn" class="btn btn-secondary">Download Backup JSON</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="app-footer">
+        <p>steamgames &bull; Built for Steam Family Sharing &bull; Hosted on GitHub Pages &bull; Inspired by SteamDB</p>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="js/categories-service.js"></script>
+    <script src="js/demo-data.js"></script>
+    <script src="js/bookmarklet.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
