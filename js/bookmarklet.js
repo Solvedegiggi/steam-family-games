@@ -147,7 +147,7 @@ window.generateBookmarkletCode = function(targetSiteUrl) {
             }
         }
 
-        // Deduplicate and merge multiple license records by appid (unions all owners)
+        /* Deduplicate and merge multiple license records by appid (unions all owners) */
         const appMap = new Map();
         rawApps.forEach(app => {
             const id = Number(app.appid);
@@ -227,8 +227,19 @@ window.generateBookmarkletCode = function(targetSiteUrl) {
     }
 })();`;
 
+    // Strip comments defensively before flattening whitespace
+    const sanitizedScript = rawScript
+        .replace(/\/\*[\s\S]*?\*\//g, '')
+        .split('\n')
+        .map(line => {
+            const trimmed = line.trim();
+            if (trimmed.startsWith('//')) return '';
+            return line;
+        })
+        .join('\n');
+
     return {
         raw: rawScript,
-        bookmarkletUrl: 'javascript:' + encodeURIComponent(rawScript.replace(/\s+/g, ' ').trim())
+        bookmarkletUrl: 'javascript:' + encodeURIComponent(sanitizedScript.replace(/\s+/g, ' ').trim())
     };
 };
