@@ -45,10 +45,27 @@
                 </button>
 
                 <!-- Language Selector -->
-                <div class="lang-selector-container">
-                    <select id="lang-select" class="lang-select" aria-label="Language">
-                        <option value="en">🇬🇧 English</option>
-                        <option value="it">🇮🇹 Italiano</option>
+                <div class="lang-dropdown-wrapper" id="lang-dropdown-wrapper">
+                    <button type="button" class="lang-dropdown-btn" id="lang-dropdown-btn" aria-haspopup="listbox" aria-expanded="false" title="Change Language">
+                        <img class="lang-flag-icon" id="current-lang-flag" src="assets/flags/en.svg" width="20" height="14" alt="English">
+                        <span id="current-lang-text" class="lang-current-label">English</span>
+                        <svg class="lang-dropdown-caret" width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M7 10l5 5 5-5z"/>
+                        </svg>
+                    </button>
+                    <div class="lang-dropdown-menu" id="lang-dropdown-menu" role="listbox">
+                        <button type="button" class="lang-option-item active" data-lang="en" role="option">
+                            <img class="lang-flag-icon" src="assets/flags/en.svg" width="20" height="14" alt="English">
+                            <span>English</span>
+                        </button>
+                        <button type="button" class="lang-option-item" data-lang="it" role="option">
+                            <img class="lang-flag-icon" src="assets/flags/it.svg" width="20" height="14" alt="Italiano">
+                            <span>Italiano</span>
+                        </button>
+                    </div>
+                    <select id="lang-select" style="display:none;" aria-label="Language">
+                        <option value="en">English</option>
+                        <option value="it">Italiano</option>
                     </select>
                 </div>
             </div>

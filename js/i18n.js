@@ -106,10 +106,69 @@
         });
 
         // Update language selector dropdown if rendered
+        updateLanguageUI();
+    }
+
+    const LANG_DATA = {
+        en: { name: 'English', flag: 'assets/flags/en.svg' },
+        it: { name: 'Italiano', flag: 'assets/flags/it.svg' }
+    };
+
+    function updateLanguageUI() {
         const langSelect = document.getElementById('lang-select');
         if (langSelect && langSelect.value !== currentLang) {
             langSelect.value = currentLang;
         }
+
+        const info = LANG_DATA[currentLang] || LANG_DATA[DEFAULT_LANG];
+        const flagImg = document.getElementById('current-lang-flag');
+        const textSpan = document.getElementById('current-lang-text');
+        const menu = document.getElementById('lang-dropdown-menu');
+
+        if (flagImg) {
+            flagImg.src = info.flag;
+            flagImg.alt = info.name;
+        }
+        if (textSpan) {
+            textSpan.textContent = info.name;
+        }
+        if (menu) {
+            menu.querySelectorAll('.lang-option-item').forEach(btn => {
+                btn.classList.toggle('active', btn.getAttribute('data-lang') === currentLang);
+            });
+        }
+    }
+
+    function setupCustomDropdown() {
+        const btn = document.getElementById('lang-dropdown-btn');
+        const menu = document.getElementById('lang-dropdown-menu');
+        const wrapper = document.getElementById('lang-dropdown-wrapper');
+        if (!btn || !menu) return;
+
+        btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const isOpen = menu.classList.toggle('open');
+            btn.setAttribute('aria-expanded', isOpen);
+        });
+
+        menu.querySelectorAll('.lang-option-item').forEach(item => {
+            item.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const targetLang = item.getAttribute('data-lang');
+                menu.classList.remove('open');
+                btn.setAttribute('aria-expanded', 'false');
+                if (targetLang && targetLang !== currentLang) {
+                    setLanguage(targetLang);
+                }
+            });
+        });
+
+        document.addEventListener('click', (e) => {
+            if (wrapper && !wrapper.contains(e.target)) {
+                menu.classList.remove('open');
+                btn.setAttribute('aria-expanded', 'false');
+            }
+        });
     }
 
     /**
@@ -142,8 +201,9 @@
 
         currentLang = detected;
         applyDomTranslations();
+        setupCustomDropdown();
 
-        // Bind language selector if present in DOM
+        // Bind hidden native language selector if present in DOM
         const langSelect = document.getElementById('lang-select');
         if (langSelect) {
             langSelect.value = currentLang;

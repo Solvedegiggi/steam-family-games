@@ -843,7 +843,8 @@
 
         // Filter Toggle Button
         elements.filtersToggleBtn.addEventListener('click', () => {
-            elements.filtersPanel.classList.toggle('open');
+            const isOpen = elements.filtersPanel.classList.toggle('open');
+            elements.filtersToggleBtn.classList.toggle('panel-open', isOpen);
         });
 
         // Tri-state Filters and Copies Filter Delegation
