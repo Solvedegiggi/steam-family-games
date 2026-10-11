@@ -43,15 +43,14 @@ class CategoriesService {
             if (resp.ok) {
                 const staticData = await resp.json();
                 for (const [appid, tags] of Object.entries(staticData)) {
-                    // Static data takes precedence unless already cached
-                    if (!this.cache.has(String(appid))) {
-                        this.cache.set(String(appid), tags);
-                    }
+                    this.cache.set(String(appid), tags);
                 }
             }
         } catch (e) {
             console.warn('Failed to fetch data/categories.json, continuing with local cache:', e);
         }
+        // Reapply any user-saved local cache entries
+        this.loadLocalCache();
         this.isLoaded = true;
     }
 

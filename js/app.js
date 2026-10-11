@@ -49,6 +49,7 @@
         syncModal: document.getElementById('sync-modal'),
         modalCloseBtn: document.getElementById('modal-close-btn'),
         bookmarkletLink: document.getElementById('bookmarklet-link'),
+        copyBookmarkletUrlBtn: document.getElementById('copy-bookmarklet-url-btn'),
         snippetCodeBox: document.getElementById('snippet-code-box'),
         copySnippetBtn: document.getElementById('copy-snippet-btn'),
         dropzone: document.getElementById('dropzone'),
@@ -653,8 +654,25 @@
         // Bookmarklet Link Drag / Click Protection
         elements.bookmarkletLink.addEventListener('click', (e) => {
             e.preventDefault();
-            alert("📌 Don't click this button here!\n\nDrag it up to your browser's Bookmarks bar (or right-click and select 'Bookmark link' / 'Add to favorites').\n\nThen navigate to store.steampowered.com in your browser and click the bookmark there!");
+            e.stopPropagation();
+            alert("📌 To use the bookmarklet: drag this button directly to your browser's Bookmarks bar, or click 'Copy Bookmarklet URL' below to add it manually.\n\nThen visit store.steampowered.com and click the bookmark to sync your family library!");
         });
+
+        // Copy Bookmarklet URL
+        if (elements.copyBookmarkletUrlBtn) {
+            elements.copyBookmarkletUrlBtn.addEventListener('click', async () => {
+                if (!generatedBookmarkletUrl) return;
+                try {
+                    await navigator.clipboard.writeText(generatedBookmarkletUrl);
+                    elements.copyBookmarkletUrlBtn.innerHTML = '<span>✅ Copied Bookmarklet URL!</span>';
+                    setTimeout(() => {
+                        elements.copyBookmarkletUrlBtn.innerHTML = '<span>📋 Copy Bookmarklet URL</span>';
+                    }, 2000);
+                } catch (err) {
+                    alert('Could not copy automatically. You can use the Console Snippet tab instead.');
+                }
+            });
+        }
 
         // Copy Console Snippet
         elements.copySnippetBtn.addEventListener('click', async () => {
@@ -744,13 +762,23 @@
     // Bookmarklet Setup & File Handlers
     // =========================================================================
 
+    let generatedBookmarkletUrl = '';
+
     function setupBookmarkletData() {
         if (!window.generateBookmarkletCode) return;
         const currentUrl = window.location.href.split('#')[0];
         const res = window.generateBookmarkletCode(currentUrl);
 
+        generatedBookmarkletUrl = res.bookmarkletUrl;
         elements.bookmarkletLink.href = res.bookmarkletUrl;
         elements.snippetCodeBox.textContent = res.raw;
+
+        elements.bookmarkletLink.addEventListener('dragstart', (e) => {
+            if (generatedBookmarkletUrl) {
+                e.dataTransfer.setData('text/plain', generatedBookmarkletUrl);
+                e.dataTransfer.setData('text/uri-list', generatedBookmarkletUrl);
+            }
+        });
     }
 
     function handleJsonFile(file) {

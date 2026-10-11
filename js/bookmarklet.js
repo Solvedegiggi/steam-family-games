@@ -5,6 +5,11 @@
 
 window.generateBookmarkletCode = function(targetSiteUrl) {
     const rawScript = `(async function() {
+        if (!location.hostname.includes('steampowered.com')) {
+            alert('👉 Please run this on store.steampowered.com while logged in to Steam!\n\nOpen store.steampowered.com and click the bookmark there.');
+            return;
+        }
+
         const HUD_ID = 'steam-family-sync-hud';
         let hud = document.getElementById(HUD_ID);
         if (!hud) {
