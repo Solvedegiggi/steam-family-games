@@ -193,37 +193,24 @@
 
             <!-- Modal Tabs -->
             <div class="modal-tabs">
-                <button type="button" class="modal-tab-btn active" data-tab="tab-snippet">💻 Steam Console Snippet (Recommended)</button>
-                <button type="button" class="modal-tab-btn" data-tab="tab-bookmarklet">⭐ Bookmarklet</button>
+                <button type="button" class="modal-tab-btn active" data-tab="tab-bookmarklet">⭐ Bookmarklet (1-Click)</button>
+                <button type="button" class="modal-tab-btn" data-tab="tab-snippet">💻 Steam Console Snippet</button>
                 <button type="button" class="modal-tab-btn" data-tab="tab-file">📁 Drop JSON File</button>
             </div>
 
             <div class="modal-body">
-                <!-- Tab 1: Console Snippet (Fastest & most reliable) -->
-                <div id="tab-snippet" class="tab-pane active">
-                    <p style="color: var(--text-secondary); margin-bottom: 12px; line-height: 1.6;">
-                        <strong>1-Click Console Sync (Zero drag issues):</strong>
+                <!-- Tab 1: Bookmarklet (Primary) -->
+                <div id="tab-bookmarklet" class="tab-pane active">
+                    <p style="color: var(--text-secondary); margin-bottom: 14px; line-height: 1.5;">
+                        <strong style="color: #ffffff; font-size: 14px;">Sync Steam Family (1-Click Bookmarklet):</strong>
                     </p>
-                    <ol style="margin-left: 20px; color: var(--text-secondary); margin-bottom: 16px; display: flex; flex-direction: column; gap: 8px;">
-                        <li>Open <a href="https://store.steampowered.com" target="_blank" rel="noopener">store.steampowered.com</a> in your browser (make sure you are logged in).</li>
-                        <li>Press <kbd>F12</kbd> (or right-click &rarr; <em>Inspect</em>) and click the <strong>Console</strong> tab.</li>
-                        <li>Paste this script and hit <kbd>Enter</kbd>:</li>
-                    </ol>
-                    <div class="code-box" id="snippet-code-box"></div>
-                    <button type="button" id="copy-snippet-btn" class="btn btn-primary" style="width: 100%; justify-content: center;">
-                        <span>📋 Copy Script to Clipboard</span>
-                    </button>
-                </div>
-
-                <!-- Tab 2: Bookmarklet -->
-                <div id="tab-bookmarklet" class="tab-pane">
                     <div class="steps-list">
                         <div class="step-item">
                             <div class="step-num">1</div>
                             <div class="step-content">
-                                <strong>Add to Bookmarks:</strong>
+                                <strong>Drag this button to your Bookmarks Bar:</strong>
                                 <div class="bookmarklet-drag-zone">
-                                    <a href="javascript:void(0)" id="bookmarklet-link" draggable="true" class="bookmarklet-pill" title="Drag to Bookmarks bar">
+                                    <a href="javascript:void(0)" id="bookmarklet-link" draggable="true" class="bookmarklet-pill" title="Sync Steam Family">
                                         ⭐ Sync Steam Family
                                     </a>
                                     <div style="font-size: 12px; color: var(--text-muted); margin-top: 10px;">
@@ -232,6 +219,9 @@
                                     <button type="button" id="copy-bookmarklet-url-btn" class="btn btn-secondary" style="margin-top: 8px; font-size: 12px; height: 32px;">
                                         <span>📋 Copy Bookmarklet URL</span>
                                     </button>
+                                    <div style="font-size: 12px; color: var(--text-secondary); margin-top: 8px;">
+                                        Bookmark name: <strong style="color: var(--steam-blue);">Sync Steam Family</strong>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -246,10 +236,26 @@
                         <div class="step-item">
                             <div class="step-num">3</div>
                             <div class="step-content">
-                                Click the <strong>Sync Steam Family</strong> bookmark in your bookmarks bar.
+                                Click the <strong>Sync Steam Family</strong> bookmark in your bookmarks bar. It will automatically gather your family library (with full artwork) and redirect straight back here!
                             </div>
                         </div>
                     </div>
+                </div>
+
+                <!-- Tab 2: Console Snippet -->
+                <div id="tab-snippet" class="tab-pane">
+                    <p style="color: var(--text-secondary); margin-bottom: 12px; line-height: 1.6;">
+                        <strong>1-Click Console Sync:</strong>
+                    </p>
+                    <ol style="margin-left: 20px; color: var(--text-secondary); margin-bottom: 16px; display: flex; flex-direction: column; gap: 8px;">
+                        <li>Open <a href="https://store.steampowered.com" target="_blank" rel="noopener">store.steampowered.com</a> in your browser (make sure you are logged in).</li>
+                        <li>Press <kbd>F12</kbd> (or right-click &rarr; <em>Inspect</em>) and click the <strong>Console</strong> tab.</li>
+                        <li>Paste this script and hit <kbd>Enter</kbd>:</li>
+                    </ol>
+                    <div class="code-box" id="snippet-code-box"></div>
+                    <button type="button" id="copy-snippet-btn" class="btn btn-secondary" style="width: 100%; justify-content: center;">
+                        <span>📋 Copy Script to Clipboard</span>
+                    </button>
                 </div>
 
                 <!-- Tab 3: JSON File Drop -->

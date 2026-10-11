@@ -114,11 +114,44 @@ window.generateBookmarkletCode = function(targetSiteUrl) {
         const aData = await aResp.json();
         const rawApps = aData?.response?.apps || [];
 
+        updateHud('Resolving official game capsule art...');
+        let assetMap = {};
+        if (rawApps.length > 0) {
+            try {
+                const chunkArray = (arr, size) => Array.from({ length: Math.ceil(arr.length / size) }, (v, i) => arr.slice(i * size, i * size + size));
+                const chunks = chunkArray(rawApps.map(a => a.appid), 80);
+                await Promise.all(chunks.map(async (chunk) => {
+                    const payload = {
+                        ids: chunk.map(id => ({ appid: id })),
+                        context: { language: 'english', country_code: 'US' },
+                        data_request: { include_assets: true }
+                    };
+                    const url = 'https://api.steampowered.com/IStoreBrowseService/GetItems/v1/?access_token=' + encodeURIComponent(token) + '&input_json=' + encodeURIComponent(JSON.stringify(payload));
+                    const res = await fetch(url);
+                    if (res.ok) {
+                        const data = await res.json();
+                        (data?.response?.store_items || []).forEach(item => {
+                            const assets = item.assets;
+                            if (assets) {
+                                const relPath = assets.small_capsule || assets.header || assets.main_capsule;
+                                if (relPath) {
+                                    assetMap[item.id] = 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/' + item.id + '/' + relPath;
+                                }
+                            }
+                        });
+                    }
+                }));
+            } catch(e) {
+                console.warn('Could not fetch store assets:', e);
+            }
+        }
+
         const formattedApps = rawApps.map(app => ({
             appid: app.appid,
             name: app.name,
             owner_steamids: (app.owner_steamids || []).map(String),
-            exclude_reason: app.exclude_reason || 0
+            exclude_reason: app.exclude_reason || 0,
+            capsule_url: assetMap[app.appid] || null
         }));
 
         const finalPayload = {
