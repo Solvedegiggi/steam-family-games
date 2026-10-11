@@ -1037,13 +1037,16 @@
 
         generatedBookmarkletUrl = res.bookmarkletUrl;
         elements.bookmarkletLink.href = res.bookmarkletUrl;
+        elements.bookmarkletLink.title = 'Steam Family Games';
         elements.snippetCodeBox.textContent = res.raw;
 
         elements.bookmarkletLink.addEventListener('dragstart', (e) => {
             if (generatedBookmarkletUrl) {
-                e.dataTransfer.setData('text/plain', generatedBookmarkletUrl);
-                e.dataTransfer.setData('text/uri-list', generatedBookmarkletUrl);
-                e.dataTransfer.setData('text/html', '<a href="' + generatedBookmarkletUrl + '">Sync Steam Family</a>');
+                const bookmarkTitle = 'Steam Family Games';
+                try {
+                    e.dataTransfer.setData('text/x-moz-url', generatedBookmarkletUrl + '\n' + bookmarkTitle);
+                    e.dataTransfer.setData('text/html', '<a href="' + generatedBookmarkletUrl + '" icon="assets/sync%20logo.svg">' + bookmarkTitle + '</a>');
+                } catch (err) {}
             }
         });
     }

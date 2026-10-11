@@ -31,7 +31,7 @@ window.generateBookmarkletCode = function(targetSiteUrl) {
         document.body.appendChild(hud);
     }
     function updateHud(html) {
-        hud.innerHTML = '<div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;"><span style="font-size:22px;">🎮</span><strong style="color:#66c0f4;font-size:16px;">Steam Family Sync</strong></div><div>' + html + '</div>';
+        hud.innerHTML = '<div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;"><svg width="22" height="22" viewBox="0 0 24 24" fill="#66c0f4" style="flex-shrink:0;"><path d="M12,4L12,1L8,5L12,9L12,6C15.31,6 18,8.69 18,12C18,13.01 17.75,13.97 17.3,14.8L18.76,16.26C19.54,15.03 20,13.57 20,12C20,7.58 16.42,4 12,4ZM12,18C8.69,18 6,15.31 6,12C6,10.99 6.25,10.03 6.7,9.2L5.24,7.74C4.46,8.97 4,10.43 4,12C4,16.42 7.58,20 12,20L12,23L16,19L12,15L12,18Z"/></svg><strong style="color:#66c0f4;font-size:16px;">Steam Family Games — Sync</strong></div><div>' + html + '</div>';
     }
 
     try {
@@ -236,13 +236,13 @@ window.generateBookmarkletCode = function(targetSiteUrl) {
         updateHud(
             '<div style="color:#5cd273;font-weight:700;font-size:15px;margin-bottom:6px;">✓ Synced ' + formattedApps.length + ' Games!</div>' +
             '<div style="color:#c6d4df;font-size:13px;margin-bottom:12px;">Across ' + memberProfiles.length + ' family members (' + memberProfiles.map(m => m.name).join(', ') + ').</div>' +
-            '<a id="steam-sync-open-btn" href="' + redirectUrl + '" target="_blank" style="display:inline-block;width:100%;box-sizing:border-box;text-align:center;padding:10px 16px;background:linear-gradient(135deg,#1a9fff,#0d47a1);color:#ffffff;font-weight:700;font-size:14px;border-radius:6px;text-decoration:none;box-shadow:0 4px 12px rgba(26,159,255,0.4);">' +
-                '🚀 Open Steam Family Games Dashboard' +
+            '<a id="steam-sync-open-btn" href="' + redirectUrl + '" style="display:inline-block;width:100%;box-sizing:border-box;text-align:center;padding:10px 16px;background:linear-gradient(135deg,#1a9fff,#0d47a1);color:#ffffff;font-weight:700;font-size:14px;border-radius:6px;text-decoration:none;box-shadow:0 4px 12px rgba(26,159,255,0.4);">' +
+                '🚀 Returning to Steam Family Games...' +
             '</a>'
         );
 
         try {
-            window.open(redirectUrl, '_blank');
+            window.location.href = redirectUrl;
         } catch(e){}
 
     } catch (err) {

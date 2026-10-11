@@ -1,4 +1,4 @@
-# 🎮 steamgames — Steam Family Library Explorer
+# 🎮 Steam Family Games
 
 A sleek, **SteamDB-inspired** web application to view, search, and filter games owned across your **Steam Family Group**.
 

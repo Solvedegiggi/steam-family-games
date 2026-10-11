@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Steam Family Games</title>
-    <link rel="icon" type="image/svg+xml" href="https://cdn.jsdelivr.net/npm/simple-icons@v13/icons/steam.svg">
+    <link rel="icon" type="image/svg+xml" href="assets/sync%20logo.svg">
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -259,10 +259,8 @@
         <div class="modal-box">
             <div class="modal-header">
                 <h3 class="modal-title">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="var(--steam-blue)">
-                        <path d="M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6 0 1.01-.25 1.97-.7 2.8l1.46 1.46C19.54 15.03 20 13.57 20 12c0-4.42-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6 0-1.01.25-1.97.7-2.8L5.24 7.74C4.46 8.97 4 10.43 4 12c0 4.42 3.58 8 8 8v3l4-4-4-4v3z"/>
-                    </svg>
-                    <span>Sync Steam Family Library</span>
+                    <img src="assets/sync%20logo.svg" width="22" height="22" alt="Sync" style="flex-shrink: 0;">
+                    <span>Steam Family Games — Sync Steam Family Library</span>
                 </h3>
                 <button type="button" id="modal-close-btn" class="modal-close-btn">&times;</button>
             </div>
@@ -278,7 +276,10 @@
                 <!-- Tab 1: Bookmarklet (Primary) -->
                 <div id="tab-bookmarklet" class="tab-pane active">
                     <p style="color: var(--text-secondary); margin-bottom: 14px; line-height: 1.5;">
-                        <strong style="color: #ffffff; font-size: 14px;">Sync Steam Family (1-Click Bookmarklet):</strong>
+                        <strong style="color: #ffffff; font-size: 14px; display: inline-flex; align-items: center; gap: 6px;">
+                            <img src="assets/sync%20logo.svg" width="16" height="16" alt="Sync">
+                            Steam Family Games (1-Click Bookmarklet):
+                        </strong>
                     </p>
                     <div class="steps-list">
                         <div class="step-item">
@@ -286,8 +287,9 @@
                             <div class="step-content">
                                 <strong>Drag this button to your Bookmarks Bar:</strong>
                                 <div class="bookmarklet-drag-zone">
-                                    <a href="javascript:void(0)" id="bookmarklet-link" draggable="true" class="bookmarklet-pill" title="Sync Steam Family">
-                                        ⭐ Sync Steam Family
+                                    <a href="javascript:void(0)" id="bookmarklet-link" draggable="true" class="bookmarklet-pill" title="Steam Family Games" icon="assets/sync%20logo.svg">
+                                        <img src="assets/sync%20logo.svg" width="18" height="18" alt="Sync">
+                                        <span>Steam Family Games</span>
                                     </a>
                                     <div style="font-size: 12px; color: var(--text-muted); margin-top: 10px;">
                                         Drag to your Bookmarks bar, or copy the code manually below:
@@ -296,7 +298,7 @@
                                         <span>📋 Copy Bookmarklet URL</span>
                                     </button>
                                     <div style="font-size: 12px; color: var(--text-secondary); margin-top: 8px;">
-                                        Bookmark name: <strong style="color: var(--steam-blue);">Sync Steam Family</strong>
+                                        Bookmark name: <strong style="color: var(--steam-blue);">Steam Family Games</strong>
                                     </div>
                                 </div>
                             </div>
@@ -305,14 +307,14 @@
                         <div class="step-item">
                             <div class="step-num">2</div>
                             <div class="step-content">
-                                Go to <a href="https://store.steampowered.com" target="_blank" rel="noopener">store.steampowered.com</a> while logged in to Steam.
+                                Go to <a href="https://store.steampowered.com">store.steampowered.com</a> while logged in to Steam.
                             </div>
                         </div>
 
                         <div class="step-item">
                             <div class="step-num">3</div>
                             <div class="step-content">
-                                Click the <strong>Sync Steam Family</strong> bookmark in your bookmarks bar. It will automatically gather your family library (with full artwork) and redirect straight back here!
+                                Click the <strong>Sync Steam Family</strong> bookmark in your bookmarks bar. It will automatically gather your family library (with full artwork &amp; player tags) and redirect right back here in the same tab!
                             </div>
                         </div>
                     </div>
@@ -324,7 +326,7 @@
                         <strong>1-Click Console Sync:</strong>
                     </p>
                     <ol style="margin-left: 20px; color: var(--text-secondary); margin-bottom: 16px; display: flex; flex-direction: column; gap: 8px;">
-                        <li>Open <a href="https://store.steampowered.com" target="_blank" rel="noopener">store.steampowered.com</a> in your browser (make sure you are logged in).</li>
+                        <li>Open <a href="https://store.steampowered.com">store.steampowered.com</a> in your browser (make sure you are logged in).</li>
                         <li>Press <kbd>F12</kbd> (or right-click &rarr; <em>Inspect</em>) and click the <strong>Console</strong> tab.</li>
                         <li>Paste this script and hit <kbd>Enter</kbd>:</li>
                     </ol>

@@ -1151,6 +1151,12 @@ a:hover {
     border: 1px solid #42a5f5;
 }
 
+.bookmarklet-pill img {
+    filter: brightness(0) invert(1);
+    display: block;
+    flex-shrink: 0;
+}
+
 .bookmarklet-pill:active {
     cursor: grabbing;
 }
