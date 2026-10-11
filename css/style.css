@@ -243,19 +243,9 @@ a:hover {
     align-items: center;
 }
 
-.lang-globe-icon {
-    position: absolute;
-    left: 11px;
-    width: 15px;
-    height: 15px;
-    color: var(--text-secondary);
-    pointer-events: none;
-    transition: color 0.15s ease;
-}
-
 .lang-select {
     height: 40px;
-    padding: 0 28px 0 32px;
+    padding: 0 30px 0 12px;
     background-color: var(--bg-surface);
     color: var(--text-primary);
     border: 1px solid var(--border-color);
@@ -272,15 +262,12 @@ a:hover {
     background-repeat: no-repeat;
     background-position: right 8px center;
     background-size: 16px;
+    font-family: inherit, "Segoe UI Emoji", "Noto Color Emoji", "Apple Color Emoji", sans-serif;
 }
 
 .lang-select:hover {
     background-color: var(--bg-surface-hover);
     border-color: #344c66;
-}
-
-.lang-selector-container:hover .lang-globe-icon {
-    color: var(--steam-blue);
 }
 
 .lang-select:focus {

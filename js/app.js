@@ -23,7 +23,8 @@
                 multiplayer: 'neutral',
                 coop: 'neutral',
                 local_mp: 'neutral',
-                pvp: 'neutral'
+                pvp: 'neutral',
+                crossplay: 'neutral'
             },
             owners: {},
             availability: {
@@ -481,7 +482,7 @@
         const includeOwners = Object.entries(f.owners).filter(([_, s]) => s === 'include').map(([k]) => k);
         const exclusiveOwners = Object.entries(f.owners).filter(([_, s]) => s === 'exclusive').map(([k]) => k);
 
-        const ALL_PLAYER_MODES = ['singleplayer', 'multiplayer', 'coop', 'local_mp', 'pvp'];
+        const ALL_PLAYER_MODES = ['singleplayer', 'multiplayer', 'coop', 'local_mp', 'pvp', 'crossplay'];
 
         let filtered = state.familyData.apps.filter(app => {
             // Search Query Filter
