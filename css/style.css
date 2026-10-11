@@ -332,6 +332,7 @@ a:hover {
 .icon-exclude { color: #ff6b6b; }
 .icon-neutral { color: var(--text-secondary); }
 .icon-include { color: #4ade80; }
+.icon-exclusive { color: #38bdf8; }
 
 .filter-items-list {
     display: flex;
@@ -395,7 +396,7 @@ a:hover {
 }
 
 .tristate-btn {
-    width: 32px;
+    width: 30px;
     height: 26px;
     border: none;
     background: transparent;
@@ -417,6 +418,12 @@ a:hover {
     border-left: none;
 }
 
+.tristate-btn.btn-exclusive {
+    font-size: 11px;
+    letter-spacing: -1.5px;
+    font-weight: 700;
+}
+
 .tristate-btn.btn-exclude:hover {
     background-color: rgba(239, 68, 68, 0.15);
     color: #ff6b6b;
@@ -430,6 +437,11 @@ a:hover {
 .tristate-btn.btn-include:hover {
     background-color: rgba(34, 197, 94, 0.15);
     color: #4ade80;
+}
+
+.tristate-btn.btn-exclusive:hover {
+    background-color: rgba(56, 189, 248, 0.15);
+    color: #38bdf8;
 }
 
 .tristate-btn.btn-exclude.active {
@@ -450,6 +462,13 @@ a:hover {
     color: #ffffff;
     font-weight: 800;
     box-shadow: 0 0 10px rgba(22, 163, 74, 0.5);
+}
+
+.tristate-btn.btn-exclusive.active {
+    background-color: #0284c7;
+    color: #ffffff;
+    font-weight: 800;
+    box-shadow: 0 0 10px rgba(2, 132, 199, 0.55);
 }
 
 .copies-selector-wrapper {

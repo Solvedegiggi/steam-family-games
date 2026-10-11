@@ -283,12 +283,20 @@
             btnInclude.type = 'button';
             btnInclude.className = 'tristate-btn btn-include' + (currentState === 'include' ? ' active' : '');
             btnInclude.setAttribute('data-state', 'include');
-            btnInclude.title = `Show only games owned by ${m.name}`;
+            btnInclude.title = `Show games owned by ${m.name}`;
             btnInclude.textContent = '✓';
+
+            const btnExclusive = document.createElement('button');
+            btnExclusive.type = 'button';
+            btnExclusive.className = 'tristate-btn btn-exclusive' + (currentState === 'exclusive' ? ' active' : '');
+            btnExclusive.setAttribute('data-state', 'exclusive');
+            btnExclusive.title = `Show games owned only by ${m.name}`;
+            btnExclusive.textContent = '✓✓';
 
             switchDiv.appendChild(btnExclude);
             switchDiv.appendChild(btnNeutral);
             switchDiv.appendChild(btnInclude);
+            switchDiv.appendChild(btnExclusive);
 
             row.appendChild(labelDiv);
             row.appendChild(switchDiv);
@@ -308,9 +316,13 @@
 
         const excludeModes = Object.entries(f.modes).filter(([_, s]) => s === 'exclude').map(([k]) => k);
         const includeModes = Object.entries(f.modes).filter(([_, s]) => s === 'include').map(([k]) => k);
+        const exclusiveModes = Object.entries(f.modes).filter(([_, s]) => s === 'exclusive').map(([k]) => k);
 
         const excludeOwners = Object.entries(f.owners).filter(([_, s]) => s === 'exclude').map(([k]) => k);
         const includeOwners = Object.entries(f.owners).filter(([_, s]) => s === 'include').map(([k]) => k);
+        const exclusiveOwners = Object.entries(f.owners).filter(([_, s]) => s === 'exclusive').map(([k]) => k);
+
+        const ALL_PLAYER_MODES = ['singleplayer', 'multiplayer', 'coop', 'local_mp', 'pvp'];
 
         let filtered = state.familyData.apps.filter(app => {
             // Search Query Filter
@@ -342,6 +354,10 @@
             if (includeOwners.length > 0) {
                 if (!owners.some(sid => includeOwners.includes(sid))) return false;
             }
+            if (exclusiveOwners.length > 0) {
+                if (owners.length === 0) return false;
+                if (!owners.every(sid => exclusiveOwners.includes(sid))) return false;
+            }
 
             // Player Modes Filter
             const tags = window.categoriesService ? window.categoriesService.getCategories(app.appid) : [];
@@ -350,6 +366,12 @@
             }
             if (includeModes.length > 0) {
                 if (!includeModes.every(m => tags.includes(m))) return false;
+            }
+            if (exclusiveModes.length > 0) {
+                const gameModes = tags.filter(m => ALL_PLAYER_MODES.includes(m));
+                if (gameModes.length === 0) return false;
+                if (!exclusiveModes.every(m => gameModes.includes(m))) return false;
+                if (gameModes.some(m => !exclusiveModes.includes(m))) return false;
             }
 
             return true;

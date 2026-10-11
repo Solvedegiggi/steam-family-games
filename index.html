@@ -52,7 +52,8 @@
                     <span class="filter-legend">
                         <span class="legend-item"><span class="legend-icon icon-exclude">✕</span> Exclude</span>
                         <span class="legend-item"><span class="legend-icon icon-neutral">—</span> Default</span>
-                        <span class="legend-item"><span class="legend-icon icon-include">✓</span> Only</span>
+                        <span class="legend-item"><span class="legend-icon icon-include">✓</span> Include</span>
+                        <span class="legend-item"><span class="legend-icon icon-exclusive">✓✓</span> Exclusive</span>
                     </span>
                 </div>
                 <div class="filter-items-list" id="modes-filter-container">
@@ -63,7 +64,8 @@
                         <div class="tristate-switch">
                             <button type="button" class="tristate-btn btn-exclude" data-state="exclude" title="Do not show Single-player">✕</button>
                             <button type="button" class="tristate-btn btn-neutral active" data-state="neutral" title="Show normally">—</button>
-                            <button type="button" class="tristate-btn btn-include" data-state="include" title="Show only Single-player">✓</button>
+                            <button type="button" class="tristate-btn btn-include" data-state="include" title="Show games with Single-player">✓</button>
+                            <button type="button" class="tristate-btn btn-exclusive" data-state="exclusive" title="Show only games with exclusively Single-player tag">✓✓</button>
                         </div>
                     </div>
                     <div class="tristate-row" data-type="mode" data-key="multiplayer">
@@ -73,7 +75,8 @@
                         <div class="tristate-switch">
                             <button type="button" class="tristate-btn btn-exclude" data-state="exclude" title="Do not show Multiplayer">✕</button>
                             <button type="button" class="tristate-btn btn-neutral active" data-state="neutral" title="Show normally">—</button>
-                            <button type="button" class="tristate-btn btn-include" data-state="include" title="Show only Multiplayer">✓</button>
+                            <button type="button" class="tristate-btn btn-include" data-state="include" title="Show games with Multiplayer">✓</button>
+                            <button type="button" class="tristate-btn btn-exclusive" data-state="exclusive" title="Show only games with exclusively Multiplayer tag">✓✓</button>
                         </div>
                     </div>
                     <div class="tristate-row" data-type="mode" data-key="coop">
@@ -83,7 +86,8 @@
                         <div class="tristate-switch">
                             <button type="button" class="tristate-btn btn-exclude" data-state="exclude" title="Do not show Co-op">✕</button>
                             <button type="button" class="tristate-btn btn-neutral active" data-state="neutral" title="Show normally">—</button>
-                            <button type="button" class="tristate-btn btn-include" data-state="include" title="Show only Co-op">✓</button>
+                            <button type="button" class="tristate-btn btn-include" data-state="include" title="Show games with Co-op">✓</button>
+                            <button type="button" class="tristate-btn btn-exclusive" data-state="exclusive" title="Show only games with exclusively Co-op tag">✓✓</button>
                         </div>
                     </div>
                     <div class="tristate-row" data-type="mode" data-key="local_mp">
@@ -93,7 +97,8 @@
                         <div class="tristate-switch">
                             <button type="button" class="tristate-btn btn-exclude" data-state="exclude" title="Do not show Local MP">✕</button>
                             <button type="button" class="tristate-btn btn-neutral active" data-state="neutral" title="Show normally">—</button>
-                            <button type="button" class="tristate-btn btn-include" data-state="include" title="Show only Local MP">✓</button>
+                            <button type="button" class="tristate-btn btn-include" data-state="include" title="Show games with Local MP">✓</button>
+                            <button type="button" class="tristate-btn btn-exclusive" data-state="exclusive" title="Show only games with exclusively Local MP tag">✓✓</button>
                         </div>
                     </div>
                     <div class="tristate-row" data-type="mode" data-key="pvp">
@@ -103,7 +108,8 @@
                         <div class="tristate-switch">
                             <button type="button" class="tristate-btn btn-exclude" data-state="exclude" title="Do not show PvP">✕</button>
                             <button type="button" class="tristate-btn btn-neutral active" data-state="neutral" title="Show normally">—</button>
-                            <button type="button" class="tristate-btn btn-include" data-state="include" title="Show only PvP">✓</button>
+                            <button type="button" class="tristate-btn btn-include" data-state="include" title="Show games with PvP">✓</button>
+                            <button type="button" class="tristate-btn btn-exclusive" data-state="exclusive" title="Show only games with exclusively PvP tag">✓✓</button>
                         </div>
                     </div>
                 </div>
@@ -113,6 +119,12 @@
             <div class="filter-card">
                 <div class="filter-card-header">
                     <span class="filter-group-title">Family Owners</span>
+                    <span class="filter-legend">
+                        <span class="legend-item"><span class="legend-icon icon-exclude">✕</span> Exclude</span>
+                        <span class="legend-item"><span class="legend-icon icon-neutral">—</span> Default</span>
+                        <span class="legend-item"><span class="legend-icon icon-include">✓</span> Include</span>
+                        <span class="legend-item"><span class="legend-icon icon-exclusive">✓✓</span> Exclusive</span>
+                    </span>
                 </div>
                 <div class="filter-items-list" id="owner-filters-container">
                     <span style="color: var(--text-muted); font-size: 13px;">No family members loaded</span>
