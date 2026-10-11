@@ -188,6 +188,8 @@
         window.dispatchEvent(new CustomEvent('languageChanged', { detail: { lang } }));
     }
 
+    let initPromise = null;
+
     /**
      * Initializes the i18n module
      */
@@ -213,20 +215,26 @@
         }
     }
 
+    // Auto-init when DOM is ready and track promise
+    if (document.readyState === 'loading') {
+        initPromise = new Promise(resolve => {
+            document.addEventListener('DOMContentLoaded', async () => {
+                await init();
+                resolve();
+            });
+        });
+    } else {
+        initPromise = init();
+    }
+
     // Expose public API
     window.i18n = {
         init,
+        initPromise,
         t,
         setLanguage,
         getLanguage: () => currentLang,
         applyDomTranslations,
         availableLanguages: AVAILABLE_LANGS
     };
-
-    // Auto-init when DOM is ready
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', init);
-    } else {
-        init();
-    }
 })();

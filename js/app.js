@@ -83,6 +83,11 @@
     // =========================================================================
 
     async function init() {
+        // Wait for i18n dictionaries to be fully loaded first
+        if (window.i18n && window.i18n.initPromise) {
+            await window.i18n.initPromise;
+        }
+
         setupEventListeners();
         setupBookmarkletData();
 
@@ -309,7 +314,8 @@
 
         // Update Header & Status Bar
         elements.familyGroupName.textContent = data.name || 'Steam Family';
-        const familyLabel = window.i18n ? window.i18n.t('family_label') : 'Family:';
+        const familyLabel = window.i18n ? window.i18n.t('family_label') : 'Family';
+        elements.syncBtnLabel.removeAttribute('data-i18n');
         elements.syncBtnLabel.textContent = `${familyLabel} (${(data.apps || []).length})`;
         updateStatusBarCounts();
 
@@ -367,6 +373,7 @@
         elements.emptyState.style.display = 'block';
         elements.statusBar.style.display = 'none';
         elements.tableCard.style.display = 'none';
+        elements.syncBtnLabel.setAttribute('data-i18n', 'sync_login');
         elements.syncBtnLabel.textContent = window.i18n ? window.i18n.t('sync_login') : 'Sync / Login';
     }
 
@@ -1061,7 +1068,8 @@
                 const sortedMembers = sortMembers(state.familyData.members || []);
                 renderOwnerFilters(sortedMembers);
 
-                const familyLabel = window.i18n ? window.i18n.t('family_label') : 'Family:';
+                const familyLabel = window.i18n ? window.i18n.t('family_label') : 'Family';
+                elements.syncBtnLabel.removeAttribute('data-i18n');
                 elements.syncBtnLabel.textContent = `${familyLabel} (${state.familyData.apps.length})`;
 
                 // Update status bar member tooltip translations
