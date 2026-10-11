@@ -75,7 +75,7 @@
         }
 
         // Check for URL hash import
-        if (checkUrlHashImport()) {
+        if (await checkUrlHashImport()) {
             return;
         }
 
@@ -96,22 +96,53 @@
     }
 
     // =========================================================================
-    // URL Hash Import
+    // URL Hash Import with Gzip Decompression
     // =========================================================================
 
-    function checkUrlHashImport() {
+    async function decodeImportPayload(rawEncoded) {
+        const decoded = decodeURIComponent(rawEncoded);
+        if (decoded.startsWith('gz:')) {
+            const b64 = decoded.substring(3);
+            const binStr = atob(b64);
+            const bytes = new Uint8Array(binStr.length);
+            for (let i = 0; i < binStr.length; i++) bytes[i] = binStr.charCodeAt(i);
+            const stream = new Blob([bytes]).stream().pipeThrough(new DecompressionStream('gzip'));
+            const text = await new Response(stream).text();
+            return JSON.parse(text);
+        }
+        if (decoded.startsWith('raw:')) {
+            const b64 = decoded.substring(4);
+            const jsonStr = decodeURIComponent(escape(atob(b64)));
+            return JSON.parse(jsonStr);
+        }
+        // Fallback for legacy base64
+        try {
+            const binStr = atob(decoded);
+            const bytes = new Uint8Array(binStr.length);
+            for (let i = 0; i < binStr.length; i++) bytes[i] = binStr.charCodeAt(i);
+            if (bytes[0] === 0x1f && bytes[1] === 0x8b) {
+                const stream = new Blob([bytes]).stream().pipeThrough(new DecompressionStream('gzip'));
+                const text = await new Response(stream).text();
+                return JSON.parse(text);
+            }
+            return JSON.parse(decodeURIComponent(escape(binStr)));
+        } catch(e) {
+            return JSON.parse(decodeURIComponent(escape(atob(decoded))));
+        }
+    }
+
+    async function checkUrlHashImport() {
         const hash = window.location.hash;
         if (hash && hash.startsWith('#import=')) {
             try {
-                const encoded = hash.substring(8);
-                const jsonStr = decodeURIComponent(escape(atob(decodeURIComponent(encoded))));
-                const data = JSON.parse(jsonStr);
+                const rawEncoded = hash.substring(8);
+                const data = await decodeImportPayload(rawEncoded);
                 if (data && data.apps && Array.isArray(data.apps)) {
                     localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
                     // Clean URL
                     history.replaceState(null, '', window.location.pathname + window.location.search);
                     loadFamilyData(data);
-                    alert(`Successfully imported family library! (${data.apps.length} games across ${data.members?.length || 0} members)`);
+                    alert(`✓ Successfully synced family library!\n${data.apps.length} games across ${data.members?.length || 0} members (${(data.members || []).map(m=>m.name).join(', ')})`);
                     return true;
                 }
             } catch (err) {
@@ -405,7 +436,7 @@
         } else {
             const placeholder = document.createElement('span');
             placeholder.className = 'tag-badge badge-default';
-            placeholder.textContent = 'Standard';
+            placeholder.textContent = '—';
             badgesContainer.appendChild(placeholder);
         }
         tdPlayers.appendChild(badgesContainer);

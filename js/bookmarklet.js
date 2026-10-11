@@ -1,11 +1,9 @@
 /**
  * Bookmarklet Generator for Steam Family Games
- * Extracts family members and shared games directly from Steam session without CORS issues.
+ * Extracts family members, avatars, and shared games directly from Steam session.
  */
 
 window.generateBookmarkletCode = function(targetSiteUrl) {
-    // Note: We avoid { credentials: 'include' } for api.steampowered.com because Steam's
-    // CORS headers allow origin https://store.steampowered.com, but omit Access-Control-Allow-Credentials.
     const rawScript = `(async function() {
         const HUD_ID = 'steam-family-sync-hud';
         let hud = document.getElementById(HUD_ID);
@@ -18,26 +16,25 @@ window.generateBookmarkletCode = function(targetSiteUrl) {
             hud.style.zIndex = '9999999';
             hud.style.background = '#171a21';
             hud.style.color = '#c6d4df';
-            hud.style.padding = '18px 22px';
+            hud.style.padding = '18px 24px';
             hud.style.borderRadius = '8px';
-            hud.style.boxShadow = '0 10px 32px rgba(0,0,0,0.85), 0 0 0 1px #66c0f4';
-            hud.style.fontFamily = 'system-ui, -apple-system, sans-serif';
+            hud.style.boxShadow = '0 10px 36px rgba(0,0,0,0.85), 0 0 0 1px #66c0f4';
+            hud.style.fontFamily = 'system-ui, -apple-system, BlinkMacSystemFont, sans-serif';
             hud.style.fontSize = '14px';
-            hud.style.maxWidth = '380px';
+            hud.style.maxWidth = '400px';
+            hud.style.lineHeight = '1.5';
             document.body.appendChild(hud);
         }
         function updateHud(html) {
-            hud.innerHTML = '<div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;"><span style="font-size:20px;">🎮</span><strong style="color:#66c0f4;font-size:16px;">Steam Family Sync</strong></div><div>' + html + '</div>';
+            hud.innerHTML = '<div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;"><span style="font-size:22px;">🎮</span><strong style="color:#66c0f4;font-size:16px;">Steam Family Sync</strong></div><div>' + html + '</div>';
         }
 
         try {
             updateHud('Connecting to Steam session...');
             let token = window.g_session?.m_strOAuthToken;
             let currentSteamId = window.g_session?.m_steamid ? String(window.g_session.m_steamid) : null;
-            let currentPersona = window.g_session?.m_strPersonaName || null;
 
             if (!token) {
-                // Fetch WebAPI token from same-origin store config
                 const cfgResp = await fetch('/pointssummary/ajaxgetasyncconfig');
                 if (cfgResp.ok) {
                     const cfgData = await cfgResp.json();
@@ -53,7 +50,6 @@ window.generateBookmarkletCode = function(targetSiteUrl) {
 
             updateHud('Fetching Steam Family Group details...');
             const groupUserUrl = 'https://api.steampowered.com/IFamilyGroupsService/GetFamilyGroupForUser/v1/?access_token=' + encodeURIComponent(token);
-            // DO NOT use { credentials: 'include' } here to prevent browser CORS credential blocking
             const guResp = await fetch(groupUserUrl);
             if (!guResp.ok) {
                 throw new Error('Failed to retrieve Family Group (HTTP ' + guResp.status + ')');
@@ -62,58 +58,50 @@ window.generateBookmarkletCode = function(targetSiteUrl) {
             const familyGroupId = guData?.response?.family_groupid;
 
             if (!familyGroupId) {
-                updateHud('<span style="color:#ffb86c;font-weight:600;">No Steam Family Group found.</span><br><small>This account is not currently a member of a Steam Family.</small>');
+                updateHud('<span style="color:#ffb86c;font-weight:600;">No Steam Family Group found.</span><br><small>This account is not in a Steam Family.</small>');
                 return;
             }
 
-            updateHud('Retrieving family members...');
+            updateHud('Retrieving family members &amp; avatars...');
             const groupUrl = 'https://api.steampowered.com/IFamilyGroupsService/GetFamilyGroup/v1/?access_token=' + encodeURIComponent(token) + '&family_groupid=' + encodeURIComponent(familyGroupId);
             const gResp = await fetch(groupUrl);
             const gData = await gResp.json();
             
-            // Steam returns response: { name: "...", members: [...] }
             const familyName = gData?.response?.name || 'Steam Family';
             const rawMembers = gData?.response?.members || [];
+            const memberIds = rawMembers.map(m => String(m.steamid));
 
-            // Detect names from page DOM if user is on /account/familymanagement
-            const domProfiles = {};
-            try {
-                document.querySelectorAll('a[href*="/profiles/"], a[href*="/id/"]').forEach(a => {
-                    const href = a.getAttribute('href') || '';
-                    const img = a.querySelector('img');
-                    const text = a.textContent?.trim();
-                    const match = href.match(/profiles\\/(\\d+)/);
-                    if (match && match[1]) {
-                        domProfiles[match[1]] = {
-                            name: text || null,
-                            avatar: img?.src || null
-                        };
+            // Fetch member personas & avatars using ISteamUser/GetPlayerSummaries with access token
+            let playerSummariesMap = {};
+            if (memberIds.length > 0) {
+                try {
+                    const summariesUrl = 'https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v2/?key=&access_token=' + encodeURIComponent(token) + '&steamids=' + encodeURIComponent(memberIds.join(','));
+                    const sumResp = await fetch(summariesUrl);
+                    if (sumResp.ok) {
+                        const sumData = await sumResp.json();
+                        (sumData?.response?.players || []).forEach(p => {
+                            playerSummariesMap[String(p.steamid)] = {
+                                name: p.personaname,
+                                avatar: p.avatarfull || p.avatarmedium || p.avatar,
+                                profileurl: p.profileurl
+                            };
+                        });
                     }
-                });
-            } catch(e){}
+                } catch(e) {
+                    console.warn('Could not fetch player summaries:', e);
+                }
+            }
 
-            // Build member profiles
+            // Build member list
             const memberProfiles = rawMembers.map((m, idx) => {
                 const sid = String(m.steamid);
-                let pName = 'Family Member ' + (idx + 1);
-                let pAvatar = 'https://avatars.steamstatic.com/fef49e7fa7e1997310d705b2a6158ff8dc1cdfeb_medium.jpg';
-
-                if (sid === currentSteamId && currentPersona) {
-                    pName = currentPersona;
-                } else if (domProfiles[sid]?.name) {
-                    pName = domProfiles[sid].name;
-                }
-
-                if (domProfiles[sid]?.avatar) {
-                    pAvatar = domProfiles[sid].avatar;
-                }
-
+                const info = playerSummariesMap[sid] || {};
                 return {
                     steamid: sid,
                     role: m.role || 1,
-                    name: pName,
-                    avatar_url: pAvatar,
-                    profile_url: 'https://steamcommunity.com/profiles/' + sid
+                    name: info.name || ('Family Member ' + (idx + 1)),
+                    avatar_url: info.avatar || 'https://avatars.steamstatic.com/fef49e7fa7e1997310d705b2a6158ff8dc1cdfeb_medium.jpg',
+                    profile_url: info.profileurl || ('https://steamcommunity.com/profiles/' + sid)
                 };
             });
 
@@ -138,34 +126,45 @@ window.generateBookmarkletCode = function(targetSiteUrl) {
             };
 
             const jsonStr = JSON.stringify(finalPayload);
-            const b64 = btoa(unescape(encodeURIComponent(jsonStr)));
             const targetUrl = '${targetSiteUrl}';
 
-            updateHud('<span style="color:#5cd273;font-weight:600;">✓ Synced Successfully!</span><br>' + formattedApps.length + ' games found across ' + memberProfiles.length + ' members.<br><br>Transferring back to dashboard...');
+            // Compress payload using native browser gzip compression
+            let encodedPayload = '';
+            try {
+                if (typeof CompressionStream !== 'undefined') {
+                    const stream = new Blob([jsonStr]).stream().pipeThrough(new CompressionStream('gzip'));
+                    const buffer = await new Response(stream).arrayBuffer();
+                    const bytes = new Uint8Array(buffer);
+                    let binary = '';
+                    for (let i = 0; i < bytes.length; i++) binary += String.fromCharCode(bytes[i]);
+                    encodedPayload = 'gz:' + btoa(binary);
+                } else {
+                    encodedPayload = 'raw:' + btoa(unescape(encodeURIComponent(jsonStr)));
+                }
+            } catch(e) {
+                encodedPayload = 'raw:' + btoa(unescape(encodeURIComponent(jsonStr)));
+            }
 
-            // Always copy to clipboard as instant safe backup
+            // Copy to clipboard
             try {
                 await navigator.clipboard.writeText(jsonStr);
             } catch(e){}
 
-            // If under 25KB, pass through URL hash; otherwise download file & open dashboard
-            if (b64.length < 24000) {
-                setTimeout(() => {
-                    window.open(targetUrl + '#import=' + encodeURIComponent(b64), '_blank');
-                }, 800);
-            } else {
-                const blob = new Blob([jsonStr], { type: 'application/json' });
-                const blobUrl = URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = blobUrl;
-                a.download = 'family_games.json';
-                a.click();
-                URL.revokeObjectURL(blobUrl);
+            const redirectUrl = targetUrl + '#import=' + encodeURIComponent(encodedPayload);
 
-                setTimeout(() => {
-                    window.open(targetUrl, '_blank');
-                }, 800);
-            }
+            updateHud(
+                '<div style="color:#5cd273;font-weight:700;font-size:15px;margin-bottom:6px;">✓ Synced ' + formattedApps.length + ' Games!</div>' +
+                '<div style="color:#c6d4df;font-size:13px;margin-bottom:12px;">Across ' + memberProfiles.length + ' family members (' + memberProfiles.map(m => m.name).join(', ') + ').</div>' +
+                '<a id="steam-sync-open-btn" href="' + redirectUrl + '" target="_blank" style="display:inline-block;width:100%;box-sizing:border-box;text-align:center;padding:10px 16px;background:linear-gradient(135deg,#1a9fff,#0d47a1);color:#ffffff;font-weight:700;font-size:14px;border-radius:6px;text-decoration:none;box-shadow:0 4px 12px rgba(26,159,255,0.4);">' +
+                    '🚀 Open Steam Family Games Dashboard' +
+                '</a>'
+            );
+
+            // Attempt automatic open
+            try {
+                window.open(redirectUrl, '_blank');
+            } catch(e){}
+
         } catch (err) {
             console.error('Steam Family Sync Error:', err);
             updateHud('<span style="color:#ff6b6b;font-weight:600;">Sync Error:</span> ' + (err.message || 'Failed to sync. Make sure you are logged into store.steampowered.com'));
