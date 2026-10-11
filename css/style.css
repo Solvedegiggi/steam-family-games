@@ -1184,6 +1184,18 @@ a:hover {
     color: var(--text-primary);
 }
 
+.step-content a,
+.tab-pane a {
+    color: var(--steam-blue);
+    text-decoration: underline;
+    font-weight: 500;
+}
+
+.step-content a:hover,
+.tab-pane a:hover {
+    color: var(--steam-blue-light);
+}
+
 .bookmarklet-drag-zone {
     text-align: center;
     padding: 20px;

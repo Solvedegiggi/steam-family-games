@@ -379,17 +379,15 @@
 
                         <div class="step-item">
                             <div class="step-num">2</div>
-                            <div class="step-content" data-i18n="step2_text">
-                                Go to store.steampowered.com while logged in to Steam.
+                            <div class="step-content" data-i18n="step2_text" data-i18n-html>
+                                Go to <a href="https://store.steampowered.com">store.steampowered.com</a> while logged in to Steam.
                             </div>
                         </div>
 
                         <div class="step-item">
                             <div class="step-num">3</div>
-                            <div class="step-content" data-i18n="step3_text">
-                                Click the 🔄 Sync Steam Family Games bookmark in your bookmarks bar. It will
-                                automatically gather your family library (with full artwork &amp; player tags) and
-                                redirect right back here in the same tab!
+                            <div class="step-content" data-i18n="step3_text" data-i18n-html>
+                                Click the <strong>🔄 Sync Steam Family Games</strong> bookmark in your bookmarks bar. It will automatically gather your family library (with full artwork &amp; player tags) and redirect right back here in the same tab!
                             </div>
                         </div>
                     </div>
@@ -402,11 +400,9 @@
                     </p>
                     <ol
                         style="margin-left: 20px; color: var(--text-secondary); margin-bottom: 16px; display: flex; flex-direction: column; gap: 8px;">
-                        <li data-i18n="console_step1">Open store.steampowered.com in your browser (make sure you are
-                            logged in).</li>
-                        <li data-i18n="console_step2">Press F12 (or right-click → Inspect) and click the Console tab.
-                        </li>
-                        <li data-i18n="console_step3">Paste this script and hit Enter:</li>
+                        <li data-i18n="console_step1" data-i18n-html>Open <a href="https://store.steampowered.com">store.steampowered.com</a> in your browser (make sure you are logged in).</li>
+                        <li data-i18n="console_step2" data-i18n-html>Press <kbd>F12</kbd> (or right-click → Inspect) and click the <strong>Console</strong> tab.</li>
+                        <li data-i18n="console_step3" data-i18n-html>Paste this script and hit Enter:</li>
                     </ol>
                     <div class="code-box" id="snippet-code-box"></div>
                     <button type="button" id="copy-snippet-btn" class="btn btn-secondary"
@@ -417,16 +413,15 @@
 
                 <!-- Tab 3: JSON File Drop -->
                 <div id="tab-file" class="tab-pane">
-                    <p style="color: var(--text-secondary); margin-bottom: 14px;" data-i18n="dropzone_desc">
-                        Drop your exported family_games.json file here, or paste raw JSON data:
+                    <p style="color: var(--text-secondary); margin-bottom: 14px;" data-i18n="dropzone_desc" data-i18n-html>
+                        Drop your exported <code>family_games.json</code> file here, or paste raw JSON data:
                     </p>
                     <div id="dropzone" class="dropzone">
                         <svg width="36" height="36" viewBox="0 0 24 24" fill="var(--steam-blue)">
                             <path
                                 d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM14 13v4h-4v-4H7l5-5 5 5h-3z" />
                         </svg>
-                        <div class="dropzone-text" data-i18n="dropzone_label">Drag & drop family_games.json here, or
-                            click to browse</div>
+                        <div class="dropzone-text" data-i18n="dropzone_label" data-i18n-html>Drag & drop <strong>family_games.json</strong> here, or click to browse</div>
                         <input type="file" id="file-input" class="file-input" accept=".json,application/json">
                     </div>
                     <textarea id="json-paste-input" class="search-input"
