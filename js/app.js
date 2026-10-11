@@ -6,9 +6,9 @@
     const STORAGE_KEY = 'steam_family_library_data';
     const CHUNK_SIZE = 40;
 
-    // Steam & SteamDB SVG Icons for table links
-    const STEAM_SVG = `<svg class="ext-icon-svg" viewBox="0 0 24 24"><path d="M11.979 0C5.678 0 .511 4.86.022 11.037l6.432 2.658c.545-.371 1.203-.59 1.912-.59.063 0 .125.004.188.006l2.861-4.142V8.91c0-2.495 2.028-4.524 4.524-4.524 2.494 0 4.524 2.031 4.524 4.527s-2.03 4.525-4.524 4.525h-.105l-4.076 2.911c0 .052.004.105.004.159 0 1.875-1.515 3.396-3.39 3.396-1.635 0-3.016-1.173-3.331-2.704L.488 15.01C1.933 20.158 6.64 24 12.213 24c6.627 0 12-5.373 12-12S18.607 0 11.979 0z"/></svg>`;
-    const STEAMDB_SVG = `<svg class="ext-icon-svg" viewBox="0 0 24 24"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.836 17.652l-3.32-1.915a3.793 3.793 0 0 1-2.516.943c-2.106 0-3.815-1.708-3.815-3.815 0-.46.082-.899.231-1.306l-2.613-1.51a5.952 5.952 0 0 0-.253 1.728c0 3.308 2.684 5.992 5.992 5.992 1.488 0 2.85-.544 3.901-1.442l2.393 1.325zm-.343-5.267a3.818 3.818 0 0 1-.223 1.294l2.617 1.512c.427-.852.673-1.808.673-2.825 0-3.308-2.684-5.992-5.992-5.992-1.503 0-2.879.555-3.937 1.47l2.399 1.328a3.81 3.81 0 0 1 2.502-.977c2.107 0 3.815 1.708 3.815 3.815a3.78 3.78 0 0 1-.854 2.375z"/></svg>`;
+    // Steam & SteamDB Icons from assets folder for table links
+    const STEAM_SVG = `<img src="assets/steam_logo.svg" class="ext-icon-img" alt="Steam" width="16" height="16">`;
+    const STEAMDB_SVG = `<img src="assets/steamdb_logo.svg" class="ext-icon-img" alt="SteamDB" width="16" height="16">`;
 
     // State
     const state = {

@@ -870,14 +870,22 @@ a:hover {
     transform: translateY(-1px);
 }
 
-.ext-icon-svg {
+.ext-icon-svg,
+.ext-icon-img {
     width: 16px;
     height: 16px;
+    display: block;
+    object-fit: contain;
     fill: var(--text-secondary);
+    transition: all 0.15s ease;
 }
 
 .ext-icon-link:hover .ext-icon-svg {
     fill: #ffffff;
+}
+
+.ext-icon-link:hover .ext-icon-img {
+    filter: brightness(1.35);
 }
 
 /* Lazy Loading Sentinel & Status */
