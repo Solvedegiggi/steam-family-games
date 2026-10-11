@@ -14,6 +14,8 @@
     const state = {
         familyData: null,
         membersMap: new Map(),
+        ownerGameCounts: new Map(),
+        currentSteamId: null,
         searchQuery: '',
         filters: {
             modes: {
@@ -203,6 +205,49 @@
         }));
     }
 
+    function sortOwnerIds(ownerIds) {
+        return [...(ownerIds || [])].sort((a, b) => {
+            const sidA = String(a);
+            const sidB = String(b);
+            const currentSid = state.currentSteamId;
+
+            // 1. Logged in account first
+            const isCurA = currentSid && sidA === currentSid;
+            const isCurB = currentSid && sidB === currentSid;
+            if (isCurA && !isCurB) return -1;
+            if (!isCurA && isCurB) return 1;
+
+            // 2. Then sorted by most owned games in the family library (descending)
+            const countA = state.ownerGameCounts.get(sidA) || 0;
+            const countB = state.ownerGameCounts.get(sidB) || 0;
+            if (countA !== countB) return countB - countA;
+
+            // 3. Alphabetical fallback
+            const nameA = state.membersMap.get(sidA)?.name || sidA;
+            const nameB = state.membersMap.get(sidB)?.name || sidB;
+            return nameA.localeCompare(nameB);
+        });
+    }
+
+    function sortMembers(members) {
+        return [...(members || [])].sort((a, b) => {
+            const sidA = String(a.steamid);
+            const sidB = String(b.steamid);
+            const currentSid = state.currentSteamId;
+
+            const isCurA = currentSid && sidA === currentSid;
+            const isCurB = currentSid && sidB === currentSid;
+            if (isCurA && !isCurB) return -1;
+            if (!isCurA && isCurB) return 1;
+
+            const countA = state.ownerGameCounts.get(sidA) || 0;
+            const countB = state.ownerGameCounts.get(sidB) || 0;
+            if (countA !== countB) return countB - countA;
+
+            return (a.name || '').localeCompare(b.name || '');
+        });
+    }
+
     function loadFamilyData(data) {
         if (data && Array.isArray(data.apps)) {
             data.apps = mergeAppsByAppId(data.apps);
@@ -215,26 +260,54 @@
         state.membersMap.clear();
         state.filters.owners = {};
 
+        // Resolve logged-in user SteamID (from bookmarklet sync, demo data, or localStorage)
+        state.currentSteamId = (data && data.current_user_steamid)
+            || (data && data.members && data.members.find(m => m.is_current_user)?.steamid)
+            || localStorage.getItem('steam_current_user_steamid')
+            || null;
+        if (state.currentSteamId) {
+            state.currentSteamId = String(state.currentSteamId);
+            try { localStorage.setItem('steam_current_user_steamid', state.currentSteamId); } catch(e) {}
+        }
+
         const members = data.members || [];
         members.forEach(m => {
             state.membersMap.set(String(m.steamid), m);
         });
+
+        // Compute total owned games per member across family library
+        state.ownerGameCounts.clear();
+        (data.apps || []).forEach(app => {
+            (app.owner_steamids || []).forEach(sid => {
+                const s = String(sid);
+                state.ownerGameCounts.set(s, (state.ownerGameCounts.get(s) || 0) + 1);
+            });
+        });
+
+        const sortedMembers = sortMembers(members);
 
         // Update Header & Status Bar
         elements.familyGroupName.textContent = data.name || 'Steam Family';
         elements.totalCount.textContent = (data.apps || []).length;
         elements.syncBtnLabel.textContent = `Family (${(data.apps || []).length})`;
 
-        // Populate member avatars in status bar
+        // Populate member avatars in status bar (sorted)
         elements.familyMembersPillList.innerHTML = '';
-        members.forEach(m => {
+        sortedMembers.forEach(m => {
+            const sid = String(m.steamid);
+            const isYou = state.currentSteamId && sid === state.currentSteamId;
+            const gameCount = state.ownerGameCounts.get(sid) || 0;
+
             const img = document.createElement('img');
             img.src = m.avatar_url || 'https://avatars.steamstatic.com/fef49e7fa7e1997310d705b2a6158ff8dc1cdfeb_medium.jpg';
-            img.className = 'owner-pfp-img tooltip';
+            img.className = 'owner-pfp-img tooltip' + (isYou ? ' current-user-avatar' : '');
             img.style.width = '24px';
             img.style.height = '24px';
             img.style.cursor = 'pointer';
-            img.setAttribute('data-tooltip', `${m.name} (Click to rename)`);
+            if (isYou) {
+                img.style.boxShadow = '0 0 0 2px #38bdf8';
+            }
+            img.setAttribute('data-tooltip', `${m.name}${isYou ? ' (You)' : ''} (${gameCount} games)\nClick to rename • Right-click to set as active user`);
             img.addEventListener('click', () => {
                 const newName = prompt(`Enter custom name for this member:`, m.name);
                 if (newName && newName.trim()) {
@@ -243,12 +316,22 @@
                     loadFamilyData(state.familyData);
                 }
             });
+            img.addEventListener('contextmenu', (e) => {
+                e.preventDefault();
+                state.currentSteamId = sid;
+                if (state.familyData) {
+                    state.familyData.current_user_steamid = sid;
+                    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state.familyData)); } catch(err) {}
+                }
+                try { localStorage.setItem('steam_current_user_steamid', sid); } catch(err) {}
+                loadFamilyData(state.familyData);
+            });
             img.onerror = () => { img.src = 'https://avatars.steamstatic.com/fef49e7fa7e1997310d705b2a6158ff8dc1cdfeb_medium.jpg'; };
             elements.familyMembersPillList.appendChild(img);
         });
 
         // Build Owner Filter Options
-        renderOwnerFilters(members);
+        renderOwnerFilters(sortedMembers);
 
         // Switch to Table View
         elements.emptyState.style.display = 'none';
@@ -619,24 +702,27 @@
         const ownersContainer = document.createElement('div');
         ownersContainer.className = 'owners-avatars-row';
 
-        (app.owner_steamids || []).forEach(sid => {
+        const sortedOwners = sortOwnerIds(app.owner_steamids);
+
+        sortedOwners.forEach(sid => {
             const member = state.membersMap.get(String(sid)) || {
                 name: 'Family Member',
                 avatar_url: 'https://avatars.steamstatic.com/fef49e7fa7e1997310d705b2a6158ff8dc1cdfeb_medium.jpg',
                 profile_url: `https://steamcommunity.com/profiles/${sid}`
             };
 
+            const isYou = state.currentSteamId && String(sid) === state.currentSteamId;
             const a = document.createElement('a');
             a.className = 'owner-pfp-link tooltip';
             a.href = member.profile_url || `https://steamcommunity.com/profiles/${sid}`;
             a.target = '_blank';
             a.rel = 'noopener';
-            a.setAttribute('data-tooltip', member.name);
+            a.setAttribute('data-tooltip', `${member.name}${isYou ? ' (You)' : ''}`);
 
             const img = document.createElement('img');
             img.src = member.avatar_url;
             img.alt = member.name;
-            img.className = 'owner-pfp-img';
+            img.className = 'owner-pfp-img' + (isYou ? ' current-user-avatar' : '');
             img.loading = 'lazy';
             img.onerror = () => { img.src = 'https://avatars.steamstatic.com/fef49e7fa7e1997310d705b2a6158ff8dc1cdfeb_medium.jpg'; };
 

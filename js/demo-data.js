@@ -2,12 +2,14 @@
 window.DEMO_FAMILY_DATA = {
     family_groupid: "103582791429521400",
     name: "The Valve Family",
+    current_user_steamid: "76561198000000001",
     members: [
         {
             steamid: "76561198000000001",
             name: "GabeN",
             avatar_url: "https://avatars.steamstatic.com/fef49e7fa7e1997310d705b2a6158ff8dc1cdfeb_medium.jpg",
-            profile_url: "https://steamcommunity.com/id/gabelogannewell"
+            profile_url: "https://steamcommunity.com/id/gabelogannewell",
+            is_current_user: true
         },
         {
             steamid: "76561198000000002",

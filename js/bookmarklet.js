@@ -104,7 +104,8 @@ window.generateBookmarkletCode = function(targetSiteUrl) {
                 role: m.role || 1,
                 name: info.name || ('Family Member ' + (idx + 1)),
                 avatar_url: info.avatar || 'https://avatars.steamstatic.com/fef49e7fa7e1997310d705b2a6158ff8dc1cdfeb_medium.jpg',
-                profile_url: info.profileurl || ('https://steamcommunity.com/profiles/' + sid)
+                profile_url: info.profileurl || ('https://steamcommunity.com/profiles/' + sid),
+                is_current_user: sid === currentSteamId
             };
         });
 
@@ -179,6 +180,7 @@ window.generateBookmarkletCode = function(targetSiteUrl) {
         const finalPayload = {
             family_groupid: familyGroupId,
             name: familyName,
+            current_user_steamid: currentSteamId,
             members: memberProfiles,
             apps: formattedApps,
             exported_at: Date.now()

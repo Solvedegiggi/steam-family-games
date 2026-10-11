@@ -796,6 +796,11 @@ a:hover {
     background-color: #0b1118;
 }
 
+.owner-pfp-img.current-user-avatar {
+    border-color: #38bdf8;
+    box-shadow: 0 0 0 1px rgba(56, 189, 248, 0.45);
+}
+
 .owner-pfp-link:hover .owner-pfp-img {
     transform: translateY(-2px);
     border-color: var(--steam-blue);
