@@ -42,7 +42,7 @@
   "filters_active": "{count} filter(s) active",
   "reset_filters": "↺ Reset all filters",
   "no_family_loaded": "No family members loaded",
-  "family_label": "Family:",
+  "family_label": "Family",
   "showing_games": "Showing {shown} of {total} games",
   "col_game_name": "Game Name",
   "col_players": "Players",

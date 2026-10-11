@@ -42,7 +42,7 @@
   "filters_active": "{count} filtri attivi",
   "reset_filters": "↺ Reimposta filtri",
   "no_family_loaded": "Nessun membro della famiglia caricato",
-  "family_label": "Famiglia:",
+  "family_label": "Famiglia",
   "showing_games": "Mostrati {shown} di {total} giochi",
   "col_game_name": "Nome gioco",
   "col_players": "Giocatori",

@@ -308,9 +308,9 @@
 
         // Update Header & Status Bar
         elements.familyGroupName.textContent = data.name || 'Steam Family';
-        elements.totalCount.textContent = (data.apps || []).length;
         const familyLabel = window.i18n ? window.i18n.t('family_label') : 'Family:';
         elements.syncBtnLabel.textContent = `${familyLabel} (${(data.apps || []).length})`;
+        updateStatusBarCounts();
 
         // Populate member avatars in status bar (sorted)
         elements.familyMembersPillList.innerHTML = '';
@@ -451,6 +451,22 @@
     // Filtering & Sorting
     // =========================================================================
 
+    function updateStatusBarCounts() {
+        const total = (state.familyData && state.familyData.apps) ? state.familyData.apps.length : 0;
+        const filtered = state.filteredApps ? state.filteredApps.length : 0;
+        const statusShowing = document.getElementById('status-showing-text');
+        if (statusShowing) {
+            if (window.i18n) {
+                statusShowing.innerHTML = window.i18n.t('showing_games', {
+                    shown: `<strong id="filtered-count" class="status-highlight">${filtered}</strong>`,
+                    total: `<strong id="total-count">${total}</strong>`
+                });
+            } else {
+                statusShowing.innerHTML = `Showing <strong id="filtered-count" class="status-highlight">${filtered}</strong> of <strong id="total-count">${total}</strong> games`;
+            }
+        }
+    }
+
     function applyFilters() {
         if (!state.familyData || !state.familyData.apps) return;
 
@@ -540,13 +556,13 @@
 
         state.filteredApps = filtered;
         state.renderedCount = 0;
-        elements.filteredCount.textContent = filtered.length;
+        updateStatusBarCounts();
         elements.gamesTableBody.innerHTML = '';
 
         // Update Sort Headers UI
         updateSortHeaders();
 
-        if (filtered.length === 0 && state.allApps.length > 0) {
+        if (filtered.length === 0 && state.familyData && state.familyData.apps && state.familyData.apps.length > 0) {
             const noMatchMsg = window.i18n ? window.i18n.t('no_games_match') : 'No games match your current filter criteria.';
             elements.gamesTableBody.innerHTML = `<tr><td colspan="5" style="text-align: center; padding: 48px; color: var(--text-muted); font-size: 14px;">${noMatchMsg}</td></tr>`;
         } else {
@@ -1034,13 +1050,60 @@
 
         // Listen for language change events to re-render dynamic content
         window.addEventListener('languageChanged', () => {
-            if (state.allApps && state.allApps.length > 0) {
-                applyFilters();
-                if (state.familyData && state.familyData.members) {
-                    renderOwnerFilters(sortOwnerProfiles(state.familyData.members));
-                }
+            if (state.familyData && Array.isArray(state.familyData.apps) && state.familyData.apps.length > 0) {
+                // Ensure table card and status bar remain visible
+                elements.emptyState.style.display = 'none';
+                elements.statusBar.style.display = 'flex';
+                elements.tableCard.style.display = 'block';
+
+                const sortedMembers = sortMembers(state.familyData.members || []);
+                renderOwnerFilters(sortedMembers);
+
                 const familyLabel = window.i18n ? window.i18n.t('family_label') : 'Family:';
-                elements.syncBtnLabel.textContent = `${familyLabel} (${state.allApps.length})`;
+                elements.syncBtnLabel.textContent = `${familyLabel} (${state.familyData.apps.length})`;
+
+                // Update status bar member tooltip translations
+                elements.familyMembersPillList.innerHTML = '';
+                sortedMembers.forEach(m => {
+                    const sid = String(m.steamid);
+                    const isYou = state.currentSteamId && sid === state.currentSteamId;
+                    const gameCount = state.ownerGameCounts.get(sid) || 0;
+
+                    const img = document.createElement('img');
+                    img.src = m.avatar_url || 'https://avatars.steamstatic.com/fef49e7fa7e1997310d705b2a6158ff8dc1cdfeb_medium.jpg';
+                    img.className = 'owner-pfp-img tooltip' + (isYou ? ' current-user-avatar' : '');
+                    img.style.width = '24px';
+                    img.style.height = '24px';
+                    img.style.cursor = 'pointer';
+                    if (isYou) {
+                        img.style.boxShadow = '0 0 0 2px #38bdf8';
+                    }
+                    const youStr = isYou ? (window.i18n ? ` (${window.i18n.t('you')})` : ' (You)') : '';
+                    img.setAttribute('data-tooltip', `${m.name}${youStr} (${gameCount} games)\nClick to rename • Right-click to set as active user`);
+                    img.addEventListener('click', () => {
+                        const newName = prompt(`Enter custom name for this member:`, m.name);
+                        if (newName && newName.trim()) {
+                            m.name = newName.trim();
+                            localStorage.setItem(STORAGE_KEY, JSON.stringify(state.familyData));
+                            loadFamilyData(state.familyData);
+                        }
+                    });
+                    img.addEventListener('contextmenu', (e) => {
+                        e.preventDefault();
+                        state.currentSteamId = sid;
+                        if (state.familyData) {
+                            state.familyData.current_user_steamid = sid;
+                            try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state.familyData)); } catch(err) {}
+                        }
+                        try { localStorage.setItem('steam_current_user_steamid', sid); } catch(err) {}
+                        loadFamilyData(state.familyData);
+                    });
+                    img.onerror = () => { img.src = 'https://avatars.steamstatic.com/fef49e7fa7e1997310d705b2a6158ff8dc1cdfeb_medium.jpg'; };
+                    elements.familyMembersPillList.appendChild(img);
+                });
+
+                updateFilterCounter();
+                applyFilters();
             } else {
                 showEmptyState();
             }
