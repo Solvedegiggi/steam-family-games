@@ -87,19 +87,20 @@ class CategoriesService {
      * Map category code to human-readable UI label and badge styling
      */
     static getBadgeInfo(tag) {
+        const tr = (k, def) => (window.i18n ? window.i18n.t(k) : def);
         switch (tag) {
             case 'singleplayer':
-                return { label: 'Single-player', className: 'badge-single' };
+                return { label: tr('mode_singleplayer', 'Single-player'), className: 'badge-single' };
             case 'multiplayer':
-                return { label: 'Multiplayer', className: 'badge-multi' };
+                return { label: tr('mode_multiplayer', 'Multiplayer'), className: 'badge-multi' };
             case 'coop':
-                return { label: 'Co-op', className: 'badge-coop' };
+                return { label: tr('mode_coop', 'Co-op'), className: 'badge-coop' };
             case 'local_mp':
-                return { label: 'Local MP', className: 'badge-local' };
+                return { label: tr('mode_local_mp', 'Local MP'), className: 'badge-local' };
             case 'pvp':
-                return { label: 'PvP', className: 'badge-pvp' };
+                return { label: tr('mode_pvp', 'PvP'), className: 'badge-pvp' };
             case 'crossplay':
-                return { label: 'Cross-play', className: 'badge-crossplay' };
+                return { label: tr('mode_crossplay', 'Crossplay'), className: 'badge-crossplay' };
             default:
                 return { label: tag, className: 'badge-default' };
         }

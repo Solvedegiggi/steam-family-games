@@ -25,8 +25,9 @@
                         d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z" />
                 </svg>
                 <input type="text" id="search-input" class="search-input" placeholder="Search games by title..."
-                    autocomplete="off">
-                <button type="button" id="search-clear-btn" class="search-clear-btn" title="Clear search">✕</button>
+                    data-i18n-placeholder="search_placeholder" autocomplete="off">
+                <button type="button" id="search-clear-btn" class="search-clear-btn" title="Clear search"
+                    data-i18n-title="clear_search">✕</button>
             </div>
 
             <!-- Header Actions -->
@@ -35,13 +36,25 @@
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
                         <path d="M10 18h4v-2h-4v2zM3 6v2h18V6H3zm3 7h12v-2H6v2z" />
                     </svg>
-                    <span>Filters</span>
+                    <span data-i18n="filters">Filters</span>
                     <span id="filter-badge-counter" class="filter-badge-counter">0</span>
                 </button>
 
                 <button type="button" id="sync-modal-btn" class="btn btn-primary">
-                    <span id="sync-btn-label">Sync / Login</span>
+                    <span id="sync-btn-label" data-i18n="sync_login">Sync / Login</span>
                 </button>
+
+                <!-- Language Selector -->
+                <div class="lang-selector-container">
+                    <svg class="lang-globe-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                        <path
+                            d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z" />
+                    </svg>
+                    <select id="lang-select" class="lang-select" aria-label="Language">
+                        <option value="en">English</option>
+                        <option value="it">Italiano</option>
+                    </select>
+                </div>
             </div>
         </div>
     </header>
@@ -52,18 +65,22 @@
             <!-- Group 1: Player Modes -->
             <div class="filter-card">
                 <div class="filter-card-header">
-                    <span class="filter-group-title">Player Modes</span>
+                    <span class="filter-group-title" data-i18n="filter_modes">Player Modes</span>
                     <span class="filter-legend">
-                        <span class="legend-item"><span class="legend-icon icon-exclude">✕</span> Exclude</span>
-                        <span class="legend-item"><span class="legend-icon icon-neutral">—</span> Default</span>
-                        <span class="legend-item"><span class="legend-icon icon-include">✓</span> Include</span>
-                        <span class="legend-item"><span class="legend-icon icon-exclusive">✓✓</span> Exclusive</span>
+                        <span class="legend-item"><span class="legend-icon icon-exclude">✕</span> <span
+                                data-i18n="exclude">Exclude</span></span>
+                        <span class="legend-item"><span class="legend-icon icon-neutral">—</span> <span
+                                data-i18n="default">Default</span></span>
+                        <span class="legend-item"><span class="legend-icon icon-include">✓</span> <span
+                                data-i18n="include">Include</span></span>
+                        <span class="legend-item"><span class="legend-icon icon-exclusive">✓✓</span> <span
+                                data-i18n="exclusive">Exclusive</span></span>
                     </span>
                 </div>
                 <div class="filter-items-list" id="modes-filter-container">
                     <div class="tristate-row" data-type="mode" data-key="singleplayer">
                         <div class="tristate-label">
-                            <span class="tag-badge badge-single">Single-player</span>
+                            <span class="tag-badge badge-single" data-i18n="mode_singleplayer">Single-player</span>
                         </div>
                         <div class="tristate-switch">
                             <button type="button" class="tristate-btn btn-exclude" data-state="exclude"
@@ -78,7 +95,7 @@
                     </div>
                     <div class="tristate-row" data-type="mode" data-key="multiplayer">
                         <div class="tristate-label">
-                            <span class="tag-badge badge-multi">Multiplayer</span>
+                            <span class="tag-badge badge-multi" data-i18n="mode_multiplayer">Multiplayer</span>
                         </div>
                         <div class="tristate-switch">
                             <button type="button" class="tristate-btn btn-exclude" data-state="exclude"
@@ -93,7 +110,7 @@
                     </div>
                     <div class="tristate-row" data-type="mode" data-key="coop">
                         <div class="tristate-label">
-                            <span class="tag-badge badge-coop">Co-op</span>
+                            <span class="tag-badge badge-coop" data-i18n="mode_coop">Co-op</span>
                         </div>
                         <div class="tristate-switch">
                             <button type="button" class="tristate-btn btn-exclude" data-state="exclude"
@@ -108,7 +125,7 @@
                     </div>
                     <div class="tristate-row" data-type="mode" data-key="local_mp">
                         <div class="tristate-label">
-                            <span class="tag-badge badge-local">Local MP</span>
+                            <span class="tag-badge badge-local" data-i18n="mode_local_mp">Local MP</span>
                         </div>
                         <div class="tristate-switch">
                             <button type="button" class="tristate-btn btn-exclude" data-state="exclude"
@@ -123,7 +140,7 @@
                     </div>
                     <div class="tristate-row" data-type="mode" data-key="pvp">
                         <div class="tristate-label">
-                            <span class="tag-badge badge-pvp">PvP</span>
+                            <span class="tag-badge badge-pvp" data-i18n="mode_pvp">PvP</span>
                         </div>
                         <div class="tristate-switch">
                             <button type="button" class="tristate-btn btn-exclude" data-state="exclude"
@@ -142,28 +159,33 @@
             <!-- Group 2: Family Owners -->
             <div class="filter-card">
                 <div class="filter-card-header">
-                    <span class="filter-group-title">Family Owners</span>
+                    <span class="filter-group-title" data-i18n="filter_owners">Family Owners</span>
                     <span class="filter-legend">
-                        <span class="legend-item"><span class="legend-icon icon-exclude">✕</span> Exclude</span>
-                        <span class="legend-item"><span class="legend-icon icon-neutral">—</span> Default</span>
-                        <span class="legend-item"><span class="legend-icon icon-include">✓</span> Include</span>
-                        <span class="legend-item"><span class="legend-icon icon-exclusive">✓✓</span> Exclusive</span>
+                        <span class="legend-item"><span class="legend-icon icon-exclude">✕</span> <span
+                                data-i18n="exclude">Exclude</span></span>
+                        <span class="legend-item"><span class="legend-icon icon-neutral">—</span> <span
+                                data-i18n="default">Default</span></span>
+                        <span class="legend-item"><span class="legend-icon icon-include">✓</span> <span
+                                data-i18n="include">Include</span></span>
+                        <span class="legend-item"><span class="legend-icon icon-exclusive">✓✓</span> <span
+                                data-i18n="exclusive">Exclusive</span></span>
                     </span>
                 </div>
                 <div class="filter-items-list" id="owner-filters-container">
-                    <span style="color: var(--text-muted); font-size: 13px;">No family members loaded</span>
+                    <span style="color: var(--text-muted); font-size: 13px;" data-i18n="no_family_loaded">No family
+                        members loaded</span>
                 </div>
             </div>
 
             <!-- Group 3: Game Availability & Status -->
             <div class="filter-card">
                 <div class="filter-card-header">
-                    <span class="filter-group-title">Game Availability</span>
+                    <span class="filter-group-title" data-i18n="filter_availability">Game Availability</span>
                 </div>
                 <div class="filter-items-list" id="availability-filter-container">
                     <div class="tristate-row" data-type="availability" data-key="not_shareable">
                         <div class="tristate-label">
-                            <span class="tag-badge badge-warning">Not Shareable</span>
+                            <span class="tag-badge badge-warning" data-i18n="avail_not_shareable">Not Shareable</span>
                         </div>
                         <div class="tristate-switch">
                             <button type="button" class="tristate-btn btn-exclude" data-state="exclude"
@@ -176,7 +198,7 @@
                     </div>
                     <div class="tristate-row" data-type="availability" data-key="free">
                         <div class="tristate-label">
-                            <span class="tag-badge badge-free">Free to Play</span>
+                            <span class="tag-badge badge-free" data-i18n="avail_free">Free to Play</span>
                         </div>
                         <div class="tristate-switch">
                             <button type="button" class="tristate-btn btn-exclude" data-state="exclude"
@@ -193,18 +215,20 @@
             <!-- Group 4: Copies in Family -->
             <div class="filter-card">
                 <div class="filter-card-header">
-                    <span class="filter-group-title">Copies in Family</span>
+                    <span class="filter-group-title" data-i18n="filter_copies">Copies in Family</span>
                 </div>
                 <div class="copies-selector-wrapper">
-                    <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 8px;">Minimum copies owned:
+                    <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 8px;" data-i18n="min_copies">
+                        Minimum copies owned:
                     </div>
                     <div class="copies-chips-container" id="copies-filter-container">
-                        <button type="button" class="copies-chip active" data-copies="1">Any (1+)</button>
+                        <button type="button" class="copies-chip active" data-copies="1" data-i18n="copies_any">Any
+                            (1+)</button>
                         <button type="button" class="copies-chip" data-copies="2">2+ Copies</button>
                         <button type="button" class="copies-chip" data-copies="3">3+ Copies</button>
                         <button type="button" class="copies-chip" data-copies="4">4+ Copies</button>
                         <button type="button" class="copies-chip" data-copies="5">5+ Copies</button>
-                        <button type="button" class="copies-chip" data-copies="6">6 Copies</button>
+                        <button type="button" class="copies-chip" data-copies="6" data-i18n="copies_6">6 Copies</button>
                     </div>
                 </div>
             </div>
@@ -212,10 +236,11 @@
 
         <div class="filter-actions-bar">
             <span id="active-filters-summary"
-                style="font-size: 13px; color: var(--text-muted); margin-right: auto; align-self: center;">
+                style="font-size: 13px; color: var(--text-muted); margin-right: auto; align-self: center;"
+                data-i18n="no_filters_active">
                 No filters active (showing all games)
             </span>
-            <button type="button" id="reset-filters-btn" class="btn-text">
+            <button type="button" id="reset-filters-btn" class="btn-text" data-i18n="reset_filters">
                 ↺ Reset all filters
             </button>
         </div>
@@ -226,10 +251,11 @@
         <!-- Status Bar -->
         <div id="status-bar" class="status-bar" style="display: none;">
             <div class="status-summary">
-                <span>Family: <strong id="family-group-name" class="status-highlight">Steam Family</strong></span>
+                <span><span data-i18n="family_label">Family:</span> <strong id="family-group-name"
+                        class="status-highlight">Steam Family</strong></span>
                 <span>•</span>
-                <span>Showing <strong id="filtered-count" class="status-highlight">0</strong> of <strong
-                        id="total-count">0</strong> games</span>
+                <span id="status-showing-text">Showing <strong id="filtered-count" class="status-highlight">0</strong>
+                    of <strong id="total-count">0</strong> games</span>
             </div>
             <div id="family-members-pill-list" style="display: flex; gap: 8px; align-items: center;"></div>
         </div>
@@ -241,14 +267,16 @@
                     <thead>
                         <tr>
                             <th class="col-name sortable" data-sort="name">
-                                Game Name <span class="sort-icon" id="sort-icon-name">▲</span>
+                                <span data-i18n="col_game_name">Game Name</span> <span class="sort-icon"
+                                    id="sort-icon-name">▲</span>
                             </th>
-                            <th class="col-players">Players</th>
-                            <th class="col-owners">Owners</th>
+                            <th class="col-players" data-i18n="col_players">Players</th>
+                            <th class="col-owners" data-i18n="col_owners">Owners</th>
                             <th class="col-copies sortable" data-sort="copies">
-                                Copies <span class="sort-icon" id="sort-icon-copies">▼</span>
+                                <span data-i18n="col_copies">Copies</span> <span class="sort-icon"
+                                    id="sort-icon-copies">▼</span>
                             </th>
-                            <th class="col-links">Links</th>
+                            <th class="col-links" data-i18n="col_links">Links</th>
                         </tr>
                     </thead>
                     <tbody id="games-table-body">
@@ -260,7 +288,7 @@
             <!-- Infinite Scroll Sentinel -->
             <div id="scroll-sentinel" class="scroll-sentinel" style="display: none;">
                 <div class="loading-spinner"></div>
-                <span>Loading more games...</span>
+                <span data-i18n="loading_more">Loading more games...</span>
             </div>
         </div>
 
@@ -270,8 +298,8 @@
                 <path
                     d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 14h-2v-2h2v2zm0-4h-2V7h2v5z" />
             </svg>
-            <h2 class="empty-title">Explore Your Steam Family Library</h2>
-            <p class="empty-desc">
+            <h2 class="empty-title" data-i18n="explore_title">Explore Your Steam Family Library</h2>
+            <p class="empty-desc" data-i18n="explore_desc">
                 View all shared games in your Steam Family Group with real-time multiplayer tags, owner profiles, and
                 copy tracking in a sleek SteamDB-style dashboard.
             </p>
@@ -280,10 +308,10 @@
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
                         <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" />
                     </svg>
-                    <span>Sync Your Steam Family</span>
+                    <span data-i18n="sync_family_btn">Sync Your Steam Family</span>
                 </button>
                 <button type="button" id="load-demo-btn" class="btn btn-secondary">
-                    <span>Preview Demo Library</span>
+                    <span data-i18n="preview_demo_btn">Preview Demo Library</span>
                 </button>
             </div>
         </div>
@@ -295,17 +323,20 @@
             <div class="modal-header">
                 <h3 class="modal-title">
                     <img src="assets/sync%20logo.svg" width="22" height="22" alt="Sync" style="flex-shrink: 0;">
-                    <span>Steam Family Games — Sync Steam Family Library</span>
+                    <span data-i18n="modal_title">Steam Family Games — Sync Steam Family Library</span>
                 </h3>
                 <button type="button" id="modal-close-btn" class="modal-close-btn">&times;</button>
             </div>
 
             <!-- Modal Tabs -->
             <div class="modal-tabs">
-                <button type="button" class="modal-tab-btn active" data-tab="tab-bookmarklet">⭐ Bookmarklet
+                <button type="button" class="modal-tab-btn active" data-tab="tab-bookmarklet"
+                    data-i18n="tab_bookmarklet">⭐ Bookmarklet
                     (1-Click)</button>
-                <button type="button" class="modal-tab-btn" data-tab="tab-snippet">💻 Steam Console Snippet</button>
-                <button type="button" class="modal-tab-btn" data-tab="tab-file">📁 Drop JSON File</button>
+                <button type="button" class="modal-tab-btn" data-tab="tab-snippet" data-i18n="tab_snippet">💻 Steam
+                    Console Snippet</button>
+                <button type="button" class="modal-tab-btn" data-tab="tab-file" data-i18n="tab_file">📁 Drop JSON
+                    File</button>
             </div>
 
             <div class="modal-body">
@@ -315,31 +346,32 @@
                         <strong
                             style="color: #ffffff; font-size: 14px; display: inline-flex; align-items: center; gap: 6px;">
                             <img src="assets/sync%20logo.svg" width="16" height="16" alt="Sync">
-                            Steam Family Games (1-Click Bookmarklet):
+                            <span data-i18n="step1_title">Steam Family Games (1-Click Bookmarklet):</span>
                         </strong>
                     </p>
                     <div class="steps-list">
                         <div class="step-item">
                             <div class="step-num">1</div>
                             <div class="step-content">
-                                <strong>Drag this button to your Bookmarks Bar:</strong>
+                                <strong data-i18n="step1_drag">Drag this button to your Bookmarks Bar:</strong>
                                 <div class="bookmarklet-drag-zone">
                                     <a href="javascript:void(0)" id="bookmarklet-link" draggable="true"
                                         class="bookmarklet-pill" title="🔄 Sync Steam Family Games"
                                         icon="assets/sync%20logo.svg">
                                         <img src="assets/sync%20logo.svg" width="18" height="18" alt="Sync">
-                                        <span>Sync Steam Family Games</span>
+                                        <span data-i18n="bookmark_pill">Sync Steam Family Games</span>
                                     </a>
-                                    <div style="font-size: 12px; color: var(--text-muted); margin-top: 10px;">
+                                    <div style="font-size: 12px; color: var(--text-muted); margin-top: 10px;"
+                                        data-i18n="bookmark_help">
                                         Drag to your Bookmarks bar, or copy the code manually below:
                                     </div>
                                     <button type="button" id="copy-bookmarklet-url-btn" class="btn btn-secondary"
                                         style="margin-top: 8px; font-size: 12px; height: 32px;">
-                                        <span>📋 Copy Bookmarklet URL</span>
+                                        <span data-i18n="copy_bookmark_btn">📋 Copy Bookmarklet URL</span>
                                     </button>
                                     <div style="font-size: 12px; color: var(--text-secondary); margin-top: 8px;">
-                                        Bookmark name: <strong style="color: var(--steam-blue);">🔄 Sync Steam Family
-                                            Games</strong>
+                                        <span data-i18n="bookmark_name_label">Bookmark name:</span> <strong
+                                            style="color: var(--steam-blue);">🔄 Sync Steam Family Games</strong>
                                     </div>
                                 </div>
                             </div>
@@ -347,17 +379,17 @@
 
                         <div class="step-item">
                             <div class="step-num">2</div>
-                            <div class="step-content">
-                                Go to <a href="https://store.steampowered.com">store.steampowered.com</a> while logged
-                                in to Steam.
+                            <div class="step-content" data-i18n="step2_text">
+                                Go to store.steampowered.com while logged in to Steam.
                             </div>
                         </div>
 
                         <div class="step-item">
                             <div class="step-num">3</div>
-                            <div class="step-content">
-                                Click the <strong>Sync Steam Family Games</strong> bookmark in your bookmarks bar. It
-                                will automatically gather your family library and redirect right back here!
+                            <div class="step-content" data-i18n="step3_text">
+                                Click the 🔄 Sync Steam Family Games bookmark in your bookmarks bar. It will
+                                automatically gather your family library (with full artwork &amp; player tags) and
+                                redirect right back here in the same tab!
                             </div>
                         </div>
                     </div>
@@ -366,61 +398,64 @@
                 <!-- Tab 2: Console Snippet -->
                 <div id="tab-snippet" class="tab-pane">
                     <p style="color: var(--text-secondary); margin-bottom: 12px; line-height: 1.6;">
-                        <strong>1-Click Console Sync:</strong>
+                        <strong data-i18n="console_sync_title">1-Click Console Sync:</strong>
                     </p>
                     <ol
                         style="margin-left: 20px; color: var(--text-secondary); margin-bottom: 16px; display: flex; flex-direction: column; gap: 8px;">
-                        <li>Open <a href="https://store.steampowered.com">store.steampowered.com</a> in your browser
-                            (make sure you are logged in).</li>
-                        <li>Press <kbd>F12</kbd> (or right-click &rarr; <em>Inspect</em>) and click the
-                            <strong>Console</strong> tab.</li>
-                        <li>Paste this script and hit <kbd>Enter</kbd>:</li>
+                        <li data-i18n="console_step1">Open store.steampowered.com in your browser (make sure you are
+                            logged in).</li>
+                        <li data-i18n="console_step2">Press F12 (or right-click → Inspect) and click the Console tab.
+                        </li>
+                        <li data-i18n="console_step3">Paste this script and hit Enter:</li>
                     </ol>
                     <div class="code-box" id="snippet-code-box"></div>
                     <button type="button" id="copy-snippet-btn" class="btn btn-secondary"
                         style="width: 100%; justify-content: center;">
-                        <span>📋 Copy Script to Clipboard</span>
+                        <span data-i18n="copy_script_btn">📋 Copy Script to Clipboard</span>
                     </button>
                 </div>
 
                 <!-- Tab 3: JSON File Drop -->
                 <div id="tab-file" class="tab-pane">
-                    <p style="color: var(--text-secondary); margin-bottom: 14px;">
-                        Drop your exported <code>family_games.json</code> file here, or paste raw JSON data:
+                    <p style="color: var(--text-secondary); margin-bottom: 14px;" data-i18n="dropzone_desc">
+                        Drop your exported family_games.json file here, or paste raw JSON data:
                     </p>
                     <div id="dropzone" class="dropzone">
                         <svg width="36" height="36" viewBox="0 0 24 24" fill="var(--steam-blue)">
                             <path
                                 d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM14 13v4h-4v-4H7l5-5 5 5h-3z" />
                         </svg>
-                        <div class="dropzone-text">Drag & drop <strong>family_games.json</strong> here, or click to
-                            browse</div>
+                        <div class="dropzone-text" data-i18n="dropzone_label">Drag & drop family_games.json here, or
+                            click to browse</div>
                         <input type="file" id="file-input" class="file-input" accept=".json,application/json">
                     </div>
                     <textarea id="json-paste-input" class="search-input"
                         style="height: 90px; padding: 10px; font-family: var(--font-mono); font-size: 12px;"
-                        placeholder="Or paste JSON content here..."></textarea>
+                        placeholder="Or paste JSON content here..."
+                        data-i18n-placeholder="paste_json_placeholder"></textarea>
                     <button type="button" id="import-pasted-json-btn" class="btn btn-secondary"
                         style="margin-top: 10px; width: 100%; justify-content: center;">
-                        <span>Load Pasted JSON</span>
+                        <span data-i18n="load_json_btn">Load Pasted JSON</span>
                     </button>
                 </div>
             </div>
 
             <div class="modal-footer">
-                <button type="button" id="clear-data-btn" class="btn-text" style="color: #ff6b6b;">Clear saved
-                    data</button>
-                <button type="button" id="export-json-btn" class="btn btn-secondary">Download Backup JSON</button>
+                <button type="button" id="clear-data-btn" class="btn-text" style="color: #ff6b6b;"
+                    data-i18n="clear_data_btn">Clear saved data</button>
+                <button type="button" id="export-json-btn" class="btn btn-secondary"
+                    data-i18n="download_backup_btn">Download Backup JSON</button>
             </div>
         </div>
     </div>
 
     <!-- Footer -->
     <footer class="app-footer">
-        <p>steamgames &bull; Built for Steam Family Sharing &bull; Hosted on GitHub Pages &bull; Inspired by SteamDB</p>
+        <p data-i18n="footer_text">Steam Family Games • Built for Steam Family Sharing • Inspired by SteamDB</p>
     </footer>
 
     <!-- Scripts -->
+    <script src="js/i18n.js"></script>
     <script src="js/categories-service.js"></script>
     <script src="js/demo-data.js"></script>
     <script src="js/bookmarklet.js"></script>

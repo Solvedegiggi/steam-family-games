@@ -236,6 +236,64 @@ a:hover {
     box-shadow: 0 0 12px rgba(33, 150, 243, 0.4);
 }
 
+/* Language Selector */
+.lang-selector-container {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+}
+
+.lang-globe-icon {
+    position: absolute;
+    left: 11px;
+    width: 15px;
+    height: 15px;
+    color: var(--text-secondary);
+    pointer-events: none;
+    transition: color 0.15s ease;
+}
+
+.lang-select {
+    height: 40px;
+    padding: 0 28px 0 32px;
+    background-color: var(--bg-surface);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    outline: none;
+    transition: all 0.15s ease;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%238f98a0'%3e%3cpath d='M7 10l5 5 5-5z'/%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 8px center;
+    background-size: 16px;
+}
+
+.lang-select:hover {
+    background-color: var(--bg-surface-hover);
+    border-color: #344c66;
+}
+
+.lang-selector-container:hover .lang-globe-icon {
+    color: var(--steam-blue);
+}
+
+.lang-select:focus {
+    border-color: var(--steam-accent);
+    box-shadow: 0 0 0 2px rgba(26, 159, 255, 0.25);
+}
+
+.lang-select option {
+    background-color: var(--bg-surface-elevated);
+    color: var(--text-primary);
+    padding: 8px;
+}
+
 .btn-success {
     background: linear-gradient(135deg, #2e7d32, #1b5e20);
     color: #ffffff;

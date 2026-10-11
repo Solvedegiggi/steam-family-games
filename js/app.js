@@ -309,7 +309,8 @@
         // Update Header & Status Bar
         elements.familyGroupName.textContent = data.name || 'Steam Family';
         elements.totalCount.textContent = (data.apps || []).length;
-        elements.syncBtnLabel.textContent = `Family (${(data.apps || []).length})`;
+        const familyLabel = window.i18n ? window.i18n.t('family_label') : 'Family:';
+        elements.syncBtnLabel.textContent = `${familyLabel} (${(data.apps || []).length})`;
 
         // Populate member avatars in status bar (sorted)
         elements.familyMembersPillList.innerHTML = '';
@@ -365,7 +366,7 @@
         elements.emptyState.style.display = 'block';
         elements.statusBar.style.display = 'none';
         elements.tableCard.style.display = 'none';
-        elements.syncBtnLabel.textContent = 'Sync / Login';
+        elements.syncBtnLabel.textContent = window.i18n ? window.i18n.t('sync_login') : 'Sync / Login';
     }
 
     function renderOwnerFilters(members) {
@@ -411,28 +412,28 @@
             btnExclude.type = 'button';
             btnExclude.className = 'tristate-btn btn-exclude' + (currentState === 'exclude' ? ' active' : '');
             btnExclude.setAttribute('data-state', 'exclude');
-            btnExclude.title = `Do not show games owned by ${m.name}`;
+            btnExclude.title = window.i18n ? window.i18n.t('title_exclude_owner', { name: m.name }) : `Do not show games owned by ${m.name}`;
             btnExclude.textContent = '✕';
 
             const btnNeutral = document.createElement('button');
             btnNeutral.type = 'button';
             btnNeutral.className = 'tristate-btn btn-neutral' + (currentState === 'neutral' ? ' active' : '');
             btnNeutral.setAttribute('data-state', 'neutral');
-            btnNeutral.title = `Show normally`;
+            btnNeutral.title = window.i18n ? window.i18n.t('title_neutral_owner') : `Show normally`;
             btnNeutral.textContent = '—';
 
             const btnInclude = document.createElement('button');
             btnInclude.type = 'button';
             btnInclude.className = 'tristate-btn btn-include' + (currentState === 'include' ? ' active' : '');
             btnInclude.setAttribute('data-state', 'include');
-            btnInclude.title = `Show games owned by ${m.name}`;
+            btnInclude.title = window.i18n ? window.i18n.t('title_include_owner', { name: m.name }) : `Show games owned by ${m.name}`;
             btnInclude.textContent = '✓';
 
             const btnExclusive = document.createElement('button');
             btnExclusive.type = 'button';
             btnExclusive.className = 'tristate-btn btn-exclusive' + (currentState === 'exclusive' ? ' active' : '');
             btnExclusive.setAttribute('data-state', 'exclusive');
-            btnExclusive.title = `Show games owned only by ${m.name}`;
+            btnExclusive.title = window.i18n ? window.i18n.t('title_exclusive_owner', { name: m.name }) : `Show games owned only by ${m.name}`;
             btnExclusive.textContent = '✓✓';
 
             switchDiv.appendChild(btnExclude);
@@ -545,8 +546,13 @@
         // Update Sort Headers UI
         updateSortHeaders();
 
-        // Render first chunk
-        renderNextChunk();
+        if (filtered.length === 0 && state.allApps.length > 0) {
+            const noMatchMsg = window.i18n ? window.i18n.t('no_games_match') : 'No games match your current filter criteria.';
+            elements.gamesTableBody.innerHTML = `<tr><td colspan="5" style="text-align: center; padding: 48px; color: var(--text-muted); font-size: 14px;">${noMatchMsg}</td></tr>`;
+        } else {
+            // Render first chunk
+            renderNextChunk();
+        }
     }
 
     function updateSortHeaders() {
@@ -579,14 +585,14 @@
             elements.filterBadgeCounter.style.display = 'inline-block';
             elements.filtersToggleBtn.classList.add('active');
             if (elements.activeFiltersSummary) {
-                elements.activeFiltersSummary.textContent = `${count} active filter${count > 1 ? 's' : ''}`;
+                elements.activeFiltersSummary.textContent = window.i18n ? window.i18n.t('filters_active', { count }) : `${count} active filter${count > 1 ? 's' : ''}`;
                 elements.activeFiltersSummary.style.color = 'var(--steam-blue)';
             }
         } else {
             elements.filterBadgeCounter.style.display = 'none';
             elements.filtersToggleBtn.classList.remove('active');
             if (elements.activeFiltersSummary) {
-                elements.activeFiltersSummary.textContent = 'No filters active (showing all games)';
+                elements.activeFiltersSummary.textContent = window.i18n ? window.i18n.t('no_filters_active') : 'No filters active (showing all games)';
                 elements.activeFiltersSummary.style.color = 'var(--text-muted)';
             }
         }
@@ -669,9 +675,11 @@
         
         let excludeBadgeHtml = '';
         if (app.exclude_reason === 1) {
-            excludeBadgeHtml = '<span class="tag-badge badge-warning" title="Publisher restricted this game from Steam Family Sharing">Not Shareable</span>';
+            const label = window.i18n ? window.i18n.t('avail_not_shareable') : 'Not Shareable';
+            excludeBadgeHtml = `<span class="tag-badge badge-warning" title="${label}">${label}</span>`;
         } else if (app.exclude_reason === 3) {
-            excludeBadgeHtml = '<span class="tag-badge badge-free" title="Free to play">Free</span>';
+            const label = window.i18n ? window.i18n.t('avail_free') : 'Free to Play';
+            excludeBadgeHtml = `<span class="tag-badge badge-free" title="${label}">${label}</span>`;
         }
 
         tdName.innerHTML = `
@@ -736,12 +744,13 @@
             };
 
             const isYou = state.currentSteamId && String(sid) === state.currentSteamId;
+            const youText = window.i18n ? window.i18n.t('you') : 'You';
             const a = document.createElement('a');
             a.className = 'owner-pfp-link tooltip';
             a.href = member.profile_url || `https://steamcommunity.com/profiles/${sid}`;
             a.target = '_blank';
             a.rel = 'noopener';
-            a.setAttribute('data-tooltip', `${member.name}${isYou ? ' (You)' : ''}`);
+            a.setAttribute('data-tooltip', `${member.name}${isYou ? ` (${youText})` : ''}`);
 
             const img = document.createElement('img');
             img.src = member.avatar_url;
@@ -1021,6 +1030,20 @@
             a.download = 'steam_family_backup.json';
             a.click();
             URL.revokeObjectURL(url);
+        });
+
+        // Listen for language change events to re-render dynamic content
+        window.addEventListener('languageChanged', () => {
+            if (state.allApps && state.allApps.length > 0) {
+                applyFilters();
+                if (state.familyData && state.familyData.members) {
+                    renderOwnerFilters(sortOwnerProfiles(state.familyData.members));
+                }
+                const familyLabel = window.i18n ? window.i18n.t('family_label') : 'Family:';
+                elements.syncBtnLabel.textContent = `${familyLabel} (${state.allApps.length})`;
+            } else {
+                showEmptyState();
+            }
         });
     }
 
