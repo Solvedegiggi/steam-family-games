@@ -51,27 +51,6 @@ Hosted 100% statically on **GitHub Pages** with zero backends, zero external pro
 
 ---
 
-## 🚀 How to Host on GitHub Pages
-
-1. **Add Remote & Push to GitHub:**
-   ```bash
-   git remote add origin https://github.com/Solvedegiggi/steam-family-games.git
-   git branch -M main
-   git push -u origin main
-   ```
-
-2. **Enable GitHub Pages:**
-   - In your repository on GitHub, navigate to **Settings** &rarr; **Pages** (under the *Code and automation* section).
-   - Under **Build and deployment** &rarr; **Source**, select **Deploy from a branch**.
-   - Under **Branch**, select **`main`** and leave the folder set to **`/ (root)`**.
-   - Click **Save**.
-
-3. **Access Your Live Site:**
-   - GitHub Pages will publish the application at:
-     **[https://solvedegiggi.github.io/steam-family-games/](https://solvedegiggi.github.io/steam-family-games/)**
-
----
-
 ## 🔒 Privacy & Security
 
 - **100% Client-Side:** All computation, filtering, and rendering happens entirely within your web browser.
